@@ -147,6 +147,7 @@ class WelcomeScene {
     this.audioToggleLabel = document.getElementById("audioToggleLabel");
     this.selected = localStorage.getItem("weddingAtmosphere") || "";
     this.floatingLeaf = document.getElementById("leafMascotFloating");
+    this.audioCompact = false;
     if (!this.section || !this.cards.length || !this.startButton) return;
     this.bind();
     this.restore();
@@ -163,9 +164,27 @@ class WelcomeScene {
       if (this.floatingLeaf) this.floatingLeaf.hidden = false;
       setTimeout(() => { this.section.hidden = true; }, 800);
     });
-    this.audioToggle?.addEventListener("click", () => this.toggleAudio());
+    this.audioToggle?.addEventListener("click", () => {
+
+  this.audioToggle.classList.remove("is-compact");
+
+  this.toggleAudio();
+
+});
     this.audio?.addEventListener("play", () => this.updateAudioUi());
     this.audio?.addEventListener("pause", () => this.updateAudioUi());
+    window.addEventListener("scroll", () => {
+
+  if (!this.audioToggle || !this.audio) return;
+
+  if (window.scrollY > 120 && !this.audio.paused) {
+
+    this.audioToggle.classList.add("is-compact");
+    this.audioCompact = true;
+
+  }
+
+});
   }
 
   restore() {
@@ -206,10 +225,21 @@ class WelcomeScene {
   }
 
   toggleAudio() {
-    if (!this.audio || this.selected === "silent") return;
-    if (this.audio.paused) this.audio.play().catch(() => {});
-    else this.audio.pause();
+
+  if (!this.audio || this.selected === "silent") return;
+
+
+  if (this.audio.paused) {
+
+    this.audio.play().catch(() => {});
+
+  } else {
+
+    this.audio.pause();
+
   }
+
+}
 
   updateAudioUi() {
     if (!this.audioToggle || !this.audioToggleLabel || !this.audio) return;

@@ -136,6 +136,48 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .audio-toggle.is-paused { opacity: .82; }
 .audio-toggle-icon { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.22); }
 .audio-toggle[hidden] { display: none; }
+/* ==========================================================
+   AUDIO COMPACT MODE
+   овал превращается в стеклянный круг
+========================================================== */
+
+.audio-toggle {
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    transition:
+        width .45s ease,
+        padding .45s ease,
+        gap .35s ease,
+        transform var(--transition),
+        opacity var(--transition),
+        background var(--transition);
+}
+
+.audio-toggle.is-compact {
+
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.audio-toggle.is-compact #audioToggleLabel {
+    opacity: 0;
+    width: 0;
+    margin: 0;
+}
+
+#audioToggleLabel {
+
+    display: inline-block;
+    max-width: 150px;
+    opacity: 1;
+    transition:
+        opacity .25s ease,
+        width .35s ease;
+}
 
 .hero-section { padding-top: calc(var(--header-height) + 58px); min-height: 100svh; display: flex; align-items: center; background: radial-gradient(circle at top left, rgba(233,202,210,.4), transparent 22%), radial-gradient(circle at bottom right, rgba(155,164,131,.18), transparent 24%), linear-gradient(180deg, #fff9f4 0%, #f7f1ea 100%); }
 .hero-layout { display: grid; justify-items: center; text-align: center; gap: 10px; max-width: 920px; }
