@@ -1,579 +1,438 @@
 "use strict";
 
-/* ==========================================================
-   WEDDING INVITATION
-========================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
-    WeddingApp.init();
+  const app = new WeddingApp();
+  app.init();
 });
 
-const WeddingApp = {
-    init() {
-        this.cache();
-        this.smoothScroll();
-        this.reveal();
-        this.leaf();
+class WeddingApp {
+  init() {
+    this.cache();
+    this.bindGlobalReveal();
+    this.bindSmoothScroll();
+    this.bindHeader();
+    this.animateLeaf();
 
-        new WelcomeScene();
-        new RSVPForm();
-        new Countdown();
-        new Gallery();
-        new Navigation();
-        new LocationActions();
-        new CopyAddress();
-    },
+    new WelcomeScene();
+    new Countdown("2026-09-05T15:30:00");
+    new LocationActions();
+    new GalleryCarousel();
+    new GalleryLightbox();
+    new RSVPForm();
+    new MobileMenu();
+  }
 
-    cache() {
-        this.sections = document.querySelectorAll(
-            "#story, #timeline, #day, #location, #gallery, #dress-code, #rsvp, #footer"
-        );
-        this.leafElement = document.querySelector("#hero .leaf");
-    },
+  cache() {
+    this.header = document.getElementById("header");
+    this.hero = document.getElementById("hero");
+    this.revealItems = document.querySelectorAll(".reveal");
+    this.leaf = document.getElementById("leafMascotFloating");
+    this.lastScrollY = window.scrollY;
+  }
 
-    smoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener("click", event => {
-                const selector = link.getAttribute("href");
-                if (!selector || selector === "#") return;
+  bindSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener("click", event => {
+        const targetSelector = link.getAttribute("href");
+        if (!targetSelector || targetSelector === "#") return;
+        const target = document.querySelector(targetSelector);
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
 
-                const target = document.querySelector(selector);
-                if (!target) return;
+  bindHeader() {
+    if (!this.header) return;
 
-                event.preventDefault();
-                target.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-        });
-    },
+    const updateHeaderLabel = () => {
+      const heroBottom = this.hero?.getBoundingClientRect().bottom ?? 0;
+      const heroMode = heroBottom > window.innerHeight * 0.58;
+      this.header.classList.toggle("hero-mode", heroMode);
+    };
 
-    reveal() {
-        this.sections.forEach(section => section.classList.add("reveal"));
+    const onScroll = () => {
+      const currentScroll = window.scrollY;
+      updateHeaderLabel();
+      this.header.classList.toggle("scrolled", currentScroll > 10);
 
-        if (!("IntersectionObserver" in window)) {
-            this.sections.forEach(section => {
-                section.classList.add("active");
-                section.querySelectorAll(".stagger").forEach(group => {
-                    group.classList.add("active");
-                });
-            });
-            return;
-        }
+      if (document.body.classList.contains("menu-open") || document.body.classList.contains("prelaunch")) {
+        this.lastScrollY = currentScroll;
+        return;
+      }
 
-        const observer = new IntersectionObserver(
-            entries => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
+      if (currentScroll > this.lastScrollY && currentScroll > 120) {
+        this.header.classList.add("is-hidden");
+      } else {
+        this.header.classList.remove("is-hidden");
+      }
 
-                    entry.target.classList.add("active");
-                    entry.target.querySelectorAll(".stagger").forEach(group => {
-                        group.classList.add("active");
-                    });
-                    observer.unobserve(entry.target);
-                });
-            },
-            { threshold: 0.12 }
-        );
+      this.lastScrollY = currentScroll;
+    };
 
-        this.sections.forEach(section => observer.observe(section));
-    },
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateHeaderLabel);
+    onScroll();
+  }
 
-    leaf() {
-        if (!this.leafElement || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            return;
-        }
-
-        let angle = 0;
-
-        const animate = () => {
-            angle += 0.02;
-            const x = Math.cos(angle) * 12;
-            const y = Math.sin(angle) * 8;
-            this.leafElement.style.translate = `${x}px ${y}px`;
-            requestAnimationFrame(animate);
-        };
-
-        animate();
+  bindGlobalReveal() {
+    if (!("IntersectionObserver" in window)) {
+      this.revealItems.forEach(item => item.classList.add("active"));
+      return;
     }
-};
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+    this.revealItems.forEach(item => observer.observe(item));
+  }
 
-/* ==========================================================
-   WELCOME / ATMOSPHERE
-========================================================== */
+  animateLeaf() {
+    if (!this.leaf || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let angle = 0;
+    const move = () => {
+      if (this.leaf.hidden) {
+        requestAnimationFrame(move);
+        return;
+      }
+      angle += 0.012;
+      const x = Math.cos(angle) * 12;
+      const y = Math.sin(angle * 1.4) * 8;
+      this.leaf.style.transform = `translate(${x}px, ${y}px) rotate(${Math.sin(angle) * 7}deg)`;
+      requestAnimationFrame(move);
+    };
+    move();
+  }
+}
+
+class MobileMenu {
+  constructor() {
+    this.button = document.getElementById("burger");
+    this.menu = document.getElementById("navMenu");
+    if (!this.button || !this.menu) return;
+    this.links = this.menu.querySelectorAll("a");
+    this.bind();
+  }
+  bind() {
+    this.button.addEventListener("click", () => {
+      const expanded = this.button.getAttribute("aria-expanded") === "true";
+      this.button.setAttribute("aria-expanded", String(!expanded));
+      this.button.classList.toggle("active", !expanded);
+      this.menu.classList.toggle("active", !expanded);
+      document.body.classList.toggle("menu-open", !expanded);
+    });
+    this.links.forEach(link => link.addEventListener("click", () => this.close()));
+    window.addEventListener("resize", () => { if (window.innerWidth > 920) this.close(); });
+  }
+  close() {
+    this.button.setAttribute("aria-expanded", "false");
+    this.button.classList.remove("active");
+    this.menu.classList.remove("active");
+    document.body.classList.remove("menu-open");
+  }
+}
 
 class WelcomeScene {
-    constructor() {
-        this.welcome = document.getElementById("welcome");
-        this.hero = document.getElementById("hero");
-        this.startButton = document.getElementById("startJourney");
-        this.cards = [...document.querySelectorAll(".atmosphere-card")];
-        this.audio = document.getElementById("backgroundAudio");
-        this.audioToggle = document.getElementById("audioToggle");
-        this.audioToggleLabel = document.getElementById("audioToggleLabel");
+  constructor() {
+    this.section = document.getElementById("welcome");
+    this.cards = Array.from(document.querySelectorAll(".atmosphere-card"));
+    this.startButton = document.getElementById("startJourney");
+    this.audio = document.getElementById("backgroundAudio");
+    this.audioToggle = document.getElementById("audioToggle");
+    this.audioToggleLabel = document.getElementById("audioToggleLabel");
+    this.selected = localStorage.getItem("weddingAtmosphere") || "";
+    this.floatingLeaf = document.getElementById("leafMascotFloating");
+    if (!this.section || !this.cards.length || !this.startButton) return;
+    this.bind();
+    this.restore();
+  }
 
-        const saved = localStorage.getItem("weddingAtmosphere");
-        this.selected = saved === "silence" ? "silent" : saved;
+  bind() {
+    this.cards.forEach(card => card.addEventListener("click", () => this.select(card)));
+    this.startButton.addEventListener("click", () => {
+      if (!this.selected) return;
+      document.body.classList.remove("prelaunch");
+      document.body.classList.add("site-ready");
+      this.section.classList.add("hide");
+      this.startAudio();
+      if (this.floatingLeaf) this.floatingLeaf.hidden = false;
+      setTimeout(() => { this.section.hidden = true; }, 800);
+    });
+    this.audioToggle?.addEventListener("click", () => this.toggleAudio());
+    this.audio?.addEventListener("play", () => this.updateAudioUi());
+    this.audio?.addEventListener("pause", () => this.updateAudioUi());
+  }
 
-        if (!this.welcome || !this.hero || !this.startButton || !this.cards.length) {
-            return;
-        }
+  restore() {
+    if (!this.selected) return this.updateButton();
+    const match = this.cards.find(card => card.dataset.atmosphere === this.selected);
+    if (match) match.classList.add("active");
+    this.updateButton();
+  }
 
-        this.bind();
-        this.restoreSelection();
-        this.updateButton();
-        this.updateAudioToggle();
+  select(card) {
+    this.cards.forEach(item => item.classList.remove("active"));
+    card.classList.add("active");
+    this.selected = card.dataset.atmosphere || "";
+    localStorage.setItem("weddingAtmosphere", this.selected);
+    this.updateButton();
+  }
+
+  updateButton() { this.startButton.disabled = !this.selected; }
+
+  startAudio() {
+    if (!this.audio) return;
+    if (this.selected === "silent") {
+      this.audio.pause();
+      this.audio.removeAttribute("src");
+      this.audio.load();
+      this.audioToggle.hidden = true;
+      return;
     }
+    const tracks = { nature: "music/nature.mp3", music: "music/wedding.mp3" };
+    const src = tracks[this.selected];
+    if (!src) return;
+    this.audio.src = src;
+    this.audio.loop = true;
+    this.audio.volume = 0.15;
+    this.audio.play().catch(() => {});
+    this.audioToggle.hidden = false;
+    this.updateAudioUi();
+  }
 
-    bind() {
-        this.cards.forEach(card => {
-            card.setAttribute("role", "button");
-            card.setAttribute("tabindex", "0");
-            card.setAttribute("aria-pressed", "false");
+  toggleAudio() {
+    if (!this.audio || this.selected === "silent") return;
+    if (this.audio.paused) this.audio.play().catch(() => {});
+    else this.audio.pause();
+  }
 
-            const selectCard = () => this.select(card);
-            card.addEventListener("click", selectCard);
-            card.addEventListener("keydown", event => {
-                if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    selectCard();
-                }
-            });
-        });
-
-        this.startButton.addEventListener("click", () => {
-            if (!this.selected) return;
-
-            this.startAtmosphere();
-            this.welcome.classList.add("hide");
-
-            window.setTimeout(() => {
-                this.welcome.hidden = true;
-                this.hero.classList.add("show", "hero-show");
-                this.hero.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 700);
-        });
-
-        if (this.audioToggle && this.audio) {
-            this.audioToggle.addEventListener("click", () => this.toggleAudio());
-            this.audio.addEventListener("play", () => this.updateAudioToggle());
-            this.audio.addEventListener("pause", () => this.updateAudioToggle());
-        }
-    }
-
-    select(card) {
-        this.cards.forEach(item => {
-            item.classList.remove("active");
-            item.setAttribute("aria-pressed", "false");
-        });
-
-        card.classList.add("active");
-        card.setAttribute("aria-pressed", "true");
-        this.selected = card.dataset.atmosphere || null;
-
-        if (this.selected) {
-            localStorage.setItem("weddingAtmosphere", this.selected);
-        }
-
-        this.updateButton();
-    }
-
-    restoreSelection() {
-        if (!this.selected) return;
-
-        const activeCard = this.cards.find(
-            card => card.dataset.atmosphere === this.selected
-        );
-
-        if (!activeCard) {
-            this.selected = null;
-            localStorage.removeItem("weddingAtmosphere");
-            return;
-        }
-
-        activeCard.classList.add("active");
-        activeCard.setAttribute("aria-pressed", "true");
-    }
-
-    updateButton() {
-        this.startButton.disabled = !this.selected;
-    }
-
-    startAtmosphere() {
-        if (!this.audio) return;
-
-        if (this.selected === "silent") {
-            this.audio.pause();
-            this.audio.removeAttribute("src");
-            this.audio.load();
-            this.hideAudioToggle();
-            return;
-        }
-
-        const tracks = {
-            nature: "music/nature.mp3",
-            music: "music/wedding.mp3"
-        };
-
-        const source = tracks[this.selected];
-        if (!source) return;
-
-        this.audio.pause();
-        this.audio.src = source;
-        this.audio.loop = true;
-        this.audio.volume = 0;
-        this.showAudioToggle();
-
-        this.audio.play()
-            .then(() => {
-                this.fadeIn();
-                this.updateAudioToggle();
-            })
-            .catch(error => {
-                console.warn("Не удалось запустить аудио:", error);
-                this.updateAudioToggle();
-            });
-    }
-
-    toggleAudio() {
-        if (!this.audio || this.selected === "silent") return;
-
-        if (this.audio.paused) {
-            if (!this.audio.getAttribute("src")) {
-                this.startAtmosphere();
-                return;
-            }
-
-            this.audio.play()
-                .then(() => this.updateAudioToggle())
-                .catch(error => console.warn("Не удалось продолжить аудио:", error));
-        } else {
-            this.audio.pause();
-        }
-    }
-
-    showAudioToggle() {
-        if (!this.audioToggle) return;
-        this.audioToggle.hidden = false;
-        requestAnimationFrame(() => this.audioToggle.classList.add("visible"));
-    }
-
-    hideAudioToggle() {
-        if (!this.audioToggle) return;
-        this.audioToggle.classList.remove("visible", "playing");
-        this.audioToggle.hidden = true;
-    }
-
-    updateAudioToggle() {
-        if (!this.audioToggle || !this.audio) return;
-
-        const isPlaying = !this.audio.paused && Boolean(this.audio.currentSrc);
-        this.audioToggle.classList.toggle("playing", isPlaying);
-        this.audioToggle.setAttribute("aria-pressed", String(isPlaying));
-        this.audioToggle.setAttribute(
-            "aria-label",
-            isPlaying ? "Поставить атмосферу на паузу" : "Продолжить атмосферу"
-        );
-
-        if (this.audioToggleLabel) {
-            this.audioToggleLabel.textContent = isPlaying ? "Атмосфера" : "Продолжить";
-        }
-    }
-
-    fadeIn(targetVolume = 0.15) {
-        if (!this.audio) return;
-
-        const interval = window.setInterval(() => {
-            if (this.audio.volume >= targetVolume) {
-                this.audio.volume = targetVolume;
-                window.clearInterval(interval);
-                return;
-            }
-
-            this.audio.volume = Math.min(targetVolume, this.audio.volume + 0.01);
-        }, 100);
-    }
+  updateAudioUi() {
+    if (!this.audioToggle || !this.audioToggleLabel || !this.audio) return;
+    const isPaused = this.audio.paused;
+    this.audioToggle.classList.toggle("is-paused", isPaused);
+    this.audioToggleLabel.textContent = isPaused ? "Продолжить" : "Атмосфера";
+  }
 }
-
-/* ==========================================================
-   RSVP
-========================================================== */
-
-class RSVPForm {
-    constructor() {
-        this.form = document.getElementById("rsvpForm");
-        this.message = document.getElementById("rsvpMessage");
-
-        if (!this.form) return;
-
-        this.button = this.form.querySelector('button[type="submit"]');
-        this.form.addEventListener("submit", event => this.submit(event));
-    }
-
-    submit(event) {
-        event.preventDefault();
-
-        if (!this.form.checkValidity()) {
-            this.form.reportValidity();
-            return;
-        }
-
-        const originalButtonContent = this.button ? this.button.innerHTML : "";
-
-        if (this.button) {
-            this.button.disabled = true;
-            this.button.innerHTML = "<span>Отправляем...</span>";
-        }
-
-        window.setTimeout(() => {
-            if (this.message) {
-                this.message.textContent = "Спасибо! Мы получили Ваш ответ 🤍";
-                this.message.classList.add("visible");
-            }
-
-            if (this.button) {
-                this.button.disabled = false;
-                this.button.innerHTML = originalButtonContent;
-            }
-
-            this.form.reset();
-        }, 700);
-    }
-}
-
-/* ==========================================================
-   COUNTDOWN
-========================================================== */
 
 class Countdown {
-    constructor() {
-        this.target = new Date("2026-09-05T15:30:00+03:00").getTime();
-        this.days = document.getElementById("days");
-        this.hours = document.getElementById("hours");
-        this.minutes = document.getElementById("minutes");
-        this.seconds = document.getElementById("seconds");
-
-        if (!this.days || !this.hours || !this.minutes || !this.seconds) return;
-
-        this.update();
-        window.setInterval(() => this.update(), 1000);
-    }
-
-    update() {
-        const difference = Math.max(0, this.target - Date.now());
-        const days = Math.floor(difference / 86400000);
-        const hours = Math.floor((difference % 86400000) / 3600000);
-        const minutes = Math.floor((difference % 3600000) / 60000);
-        const seconds = Math.floor((difference % 60000) / 1000);
-
-        this.days.textContent = String(days).padStart(3, "0");
-        this.hours.textContent = String(hours).padStart(2, "0");
-        this.minutes.textContent = String(minutes).padStart(2, "0");
-        this.seconds.textContent = String(seconds).padStart(2, "0");
-    }
+  constructor(targetDate) {
+    this.targetTime = new Date(targetDate).getTime();
+    this.days = document.getElementById("days");
+    this.hours = document.getElementById("hours");
+    this.minutes = document.getElementById("minutes");
+    this.seconds = document.getElementById("seconds");
+    this.daysLabel = document.getElementById("daysLabel");
+    this.hoursLabel = document.getElementById("hoursLabel");
+    this.minutesLabel = document.getElementById("minutesLabel");
+    this.secondsLabel = document.getElementById("secondsLabel");
+    if (!this.days || Number.isNaN(this.targetTime)) return;
+    this.update();
+    setInterval(() => this.update(), 1000);
+  }
+  plural(number, one, few, many) {
+    const n = Math.abs(number) % 100;
+    const n1 = n % 10;
+    if (n > 10 && n < 20) return many;
+    if (n1 > 1 && n1 < 5) return few;
+    if (n1 === 1) return one;
+    return many;
+  }
+  update() {
+    const now = Date.now();
+    const distance = Math.max(this.targetTime - now, 0);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
+    this.days.textContent = String(days);
+    this.hours.textContent = String(hours).padStart(2, "0");
+    this.minutes.textContent = String(minutes).padStart(2, "0");
+    this.seconds.textContent = String(seconds).padStart(2, "0");
+    if (this.daysLabel) this.daysLabel.textContent = this.plural(days, "день", "дня", "дней");
+    if (this.hoursLabel) this.hoursLabel.textContent = this.plural(hours, "час", "часа", "часов");
+    if (this.minutesLabel) this.minutesLabel.textContent = this.plural(minutes, "минута", "минуты", "минут");
+    if (this.secondsLabel) this.secondsLabel.textContent = this.plural(seconds, "секунда", "секунды", "секунд");
+  }
 }
-
-/* ==========================================================
-   GALLERY / LIGHTBOX
-========================================================== */
-
-class Gallery {
-    constructor() {
-        this.images = [...document.querySelectorAll(".gallery-item img")];
-        this.lightbox = document.getElementById("lightbox");
-        this.preview = document.getElementById("lightboxImage");
-        this.closeButton = document.getElementById("lightboxClose");
-
-        if (!this.images.length || !this.lightbox || !this.preview || !this.closeButton) {
-            return;
-        }
-
-        this.bind();
-    }
-
-    bind() {
-        this.images.forEach(image => {
-            image.addEventListener("click", () => this.open(image));
-        });
-
-        this.closeButton.addEventListener("click", () => this.close());
-        this.closeButton.addEventListener("keydown", event => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                this.close();
-            }
-        });
-        this.lightbox.addEventListener("click", event => {
-            if (event.target === this.lightbox) this.close();
-        });
-        document.addEventListener("keydown", event => {
-            if (event.key === "Escape" && this.lightbox.classList.contains("active")) {
-                this.close();
-            }
-        });
-    }
-
-    open(image) {
-        this.preview.src = image.currentSrc || image.src;
-        this.preview.alt = image.alt || "Фотография Александра и Лианы";
-        this.lightbox.classList.add("active");
-        this.lightbox.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-    }
-
-    close() {
-        this.lightbox.classList.remove("active");
-        this.lightbox.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
-    }
-}
-
-/* ==========================================================
-   MOBILE NAVIGATION
-========================================================== */
-
-class Navigation {
-    constructor() {
-        this.header = document.getElementById("header");
-        this.burger = document.getElementById("burger");
-        this.menu = document.querySelector(".nav-menu");
-        this.lastScroll = window.scrollY;
-        this.scrollThreshold = 7;
-        this.ticking = false;
-
-        if (!this.header || !this.burger || !this.menu) return;
-
-        this.bind();
-    }
-
-    bind() {
-        this.burger.addEventListener("click", () => {
-            const opened = this.menu.classList.toggle("active");
-            this.burger.classList.toggle("active", opened);
-            this.burger.setAttribute("aria-expanded", String(opened));
-
-            if (opened) {
-                this.header.classList.remove("hide");
-            }
-        });
-
-        this.menu.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", () => this.closeMenu());
-        });
-
-        window.addEventListener("scroll", () => this.requestScrollUpdate(), { passive: true });
-    }
-
-    closeMenu() {
-        this.burger.classList.remove("active");
-        this.menu.classList.remove("active");
-        this.burger.setAttribute("aria-expanded", "false");
-    }
-
-    requestScrollUpdate() {
-        if (this.ticking) return;
-
-        this.ticking = true;
-        window.requestAnimationFrame(() => {
-            this.onScroll();
-            this.ticking = false;
-        });
-    }
-
-    onScroll() {
-        const currentScroll = Math.max(0, window.scrollY);
-        const difference = currentScroll - this.lastScroll;
-
-        if (this.menu.classList.contains("active") || currentScroll < 90) {
-            this.header.classList.remove("hide");
-            this.lastScroll = currentScroll;
-            return;
-        }
-
-        if (Math.abs(difference) < this.scrollThreshold) {
-            return;
-        }
-
-        if (difference > 0) {
-            this.header.classList.add("hide");
-            this.closeMenu();
-        } else {
-            this.header.classList.remove("hide");
-        }
-
-        this.lastScroll = currentScroll;
-    }
-}
-
-/* ==========================================================
-   LOCATION ACTIONS
-========================================================== */
 
 class LocationActions {
-    constructor() {
-        this.toggle = document.getElementById("locationAddressToggle");
-        this.actions = document.getElementById("locationActions");
-
-        if (!this.toggle || !this.actions) return;
-
-        this.bind();
-    }
-
-    bind() {
-        this.toggle.addEventListener("click", () => this.setOpen(this.actions.hidden));
-
-        document.addEventListener("click", event => {
-            if (this.actions.hidden) return;
-            if (this.toggle.contains(event.target) || this.actions.contains(event.target)) return;
-            this.setOpen(false);
-        });
-
-        document.addEventListener("keydown", event => {
-            if (event.key === "Escape") this.setOpen(false);
-        });
-    }
-
-    setOpen(opened) {
-        this.actions.hidden = !opened;
-        this.toggle.classList.toggle("active", opened);
-        this.toggle.setAttribute("aria-expanded", String(opened));
-    }
+  constructor() {
+    this.toggle = document.getElementById("locationAddressToggle");
+    this.actions = document.getElementById("locationActions");
+    this.copyButton = document.getElementById("copyAddress");
+    this.copyStatus = document.getElementById("copyStatus");
+    this.address = "г. Карачаевск, ул. Пушкина, д. 127 (Гостевой дом «Домики»)";
+    if (!this.toggle || !this.actions || !this.copyButton) return;
+    this.actions.hidden = true;
+    this.actions.style.display = "none";
+    this.toggle.setAttribute("aria-expanded", "false");
+    this.bind();
+  }
+  bind() {
+    this.toggle.addEventListener("click", () => {
+      const expanded = this.toggle.getAttribute("aria-expanded") === "true";
+      this.toggle.setAttribute("aria-expanded", String(!expanded));
+      this.actions.hidden = expanded;
+      this.actions.style.display = expanded ? "none" : "grid";
+    });
+    this.copyButton.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(this.address); }
+      catch { this.fallbackCopy(); }
+      this.showStatus("Адрес скопирован");
+    });
+  }
+  fallbackCopy() {
+    const input = document.createElement("textarea");
+    input.value = this.address;
+    input.style.position = "fixed";
+    input.style.left = "-9999px";
+    document.body.appendChild(input);
+    input.focus(); input.select(); document.execCommand("copy"); input.remove();
+  }
+  showStatus(text) {
+    if (!this.copyStatus) return;
+    this.copyStatus.textContent = text;
+    clearTimeout(this.statusTimer);
+    this.statusTimer = setTimeout(() => { this.copyStatus.textContent = ""; }, 2200);
+  }
 }
 
-/* ==========================================================
-   COPY ADDRESS
-========================================================== */
-
-class CopyAddress {
-    constructor() {
-        this.button = document.getElementById("copyAddress");
-        this.status = document.getElementById("copyStatus");
-        if (!this.button) return;
-
-        this.originalText = this.button.textContent.trim();
-        this.button.addEventListener("click", () => this.copy());
+class GalleryCarousel {
+  constructor() {
+    this.track = document.getElementById("galleryTrack");
+    this.prev = document.querySelector(".gallery-prev");
+    this.next = document.querySelector(".gallery-next");
+    if (!this.track || !this.prev || !this.next) return;
+    this.items = Array.from(this.track.querySelectorAll(".gallery-item"));
+    if (this.items.length < 2) return;
+    this.isAdjusting = false;
+    this.setupInfinite();
+    this.bind();
+    setTimeout(() => this.updateActiveState(), 80);
+  }
+  setupInfinite() {
+    const firstClone = this.items[0].cloneNode(true);
+    const lastClone = this.items[this.items.length - 1].cloneNode(true);
+    firstClone.dataset.clone = "first";
+    lastClone.dataset.clone = "last";
+    this.track.appendChild(firstClone);
+    this.track.insertBefore(lastClone, this.track.firstChild);
+    requestAnimationFrame(() => {
+      this.track.scrollLeft = this.getItemWidth();
+    });
+  }
+  getItemWidth() {
+    const item = this.track.querySelector(".gallery-item");
+    const style = window.getComputedStyle(this.track);
+    const gap = parseFloat(style.columnGap || style.gap || 18);
+    return item.getBoundingClientRect().width + gap;
+  }
+  bind() {
+    this.prev.addEventListener("click", () => this.track.scrollBy({ left: -this.getItemWidth(), behavior: "smooth" }));
+    this.next.addEventListener("click", () => this.track.scrollBy({ left: this.getItemWidth(), behavior: "smooth" }));
+    this.track.addEventListener("scroll", () => { this.handleLoop(); this.updateActiveState(); }, { passive: true });
+    window.addEventListener("resize", () => {
+      const itemWidth = this.getItemWidth();
+      if (this.track.scrollLeft < itemWidth * 0.5) this.track.scrollLeft = itemWidth;
+      this.updateActiveState();
+    });
+  }
+  updateActiveState() {
+    const trackRect = this.track.getBoundingClientRect();
+    const center = trackRect.left + trackRect.width / 2;
+    let closest = null;
+    let closestDistance = Infinity;
+    const items = Array.from(this.track.querySelectorAll(".gallery-item"));
+    items.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(center - itemCenter);
+      item.classList.remove("is-active");
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closest = item;
+      }
+    });
+    if (closest) closest.classList.add("is-active");
+  }
+  handleLoop() {
+    if (this.isAdjusting) return;
+    const itemWidth = this.getItemWidth();
+    const maxScroll = this.track.scrollWidth - this.track.clientWidth;
+    if (this.track.scrollLeft <= itemWidth * 0.3) {
+      this.isAdjusting = true;
+      this.track.scrollLeft = maxScroll - itemWidth * 1.7;
+      requestAnimationFrame(() => { this.isAdjusting = false; this.updateActiveState(); });
+    } else if (this.track.scrollLeft >= maxScroll - itemWidth * 0.3) {
+      this.isAdjusting = true;
+      this.track.scrollLeft = itemWidth;
+      requestAnimationFrame(() => { this.isAdjusting = false; this.updateActiveState(); });
     }
+  }
+}
 
-    async copy() {
-        const address = "г. Карачаевск, ул. Пушкина, 127 — гостевой дом «Домики»";
+class GalleryLightbox {
+  constructor() {
+    this.lightbox = document.getElementById("lightbox");
+    this.lightboxImage = document.getElementById("lightboxImage");
+    this.closeButton = document.getElementById("lightboxClose");
+    if (!this.lightbox || !this.lightboxImage || !this.closeButton) return;
+    this.bind();
+  }
+  bind() {
+    document.addEventListener("click", event => {
+      const item = event.target.closest(".gallery-item");
+      if (!item) return;
+      const image = item.querySelector("img");
+      if (!image) return;
+      this.lightboxImage.src = image.src;
+      this.lightboxImage.alt = image.alt;
+      this.lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+    });
+    this.closeButton.addEventListener("click", () => this.close());
+    this.lightbox.addEventListener("click", event => { if (event.target === this.lightbox) this.close(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && !this.lightbox.hidden) this.close(); });
+  }
+  close() {
+    this.lightbox.hidden = true;
+    this.lightboxImage.src = "";
+    document.body.style.overflow = "";
+  }
+}
 
-        try {
-            await navigator.clipboard.writeText(address);
-        } catch {
-            const textarea = document.createElement("textarea");
-            textarea.value = address;
-            textarea.style.position = "fixed";
-            textarea.style.opacity = "0";
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            textarea.remove();
-        }
-
-        this.button.textContent = "Скопировано ✓";
-        if (this.status) this.status.textContent = "Адрес скопирован";
-
-        window.setTimeout(() => {
-            this.button.textContent = this.originalText;
-            if (this.status) this.status.textContent = "";
-        }, 2000);
+class RSVPForm {
+  constructor() {
+    this.form = document.getElementById("rsvpForm");
+    this.message = document.getElementById("rsvpMessage");
+    if (!this.form) return;
+    this.submitButton = this.form.querySelector("button[type='submit']");
+    this.bind();
+  }
+  bind() {
+    this.form.addEventListener("submit", event => {
+      event.preventDefault();
+      if (!this.form.reportValidity()) return;
+      this.sendMock();
+    });
+  }
+  sendMock() {
+    if (this.submitButton) {
+      this.submitButton.disabled = true;
+      this.submitButton.textContent = "Отправляем...";
     }
+    setTimeout(() => {
+      if (this.submitButton) {
+        this.submitButton.disabled = false;
+        this.submitButton.textContent = "Отправить анкету";
+      }
+      if (this.message) this.message.textContent = "Спасибо! Мы получили ваш ответ и будем очень рады видеть вас.";
+      this.form.reset();
+    }, 1200);
+  }
 }

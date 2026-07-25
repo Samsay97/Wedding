@@ -1,899 +1,367 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Наша свадьба</title>
-<link rel="stylesheet" href="css/style.css">
-<script src="js/script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6B2432">
+  <title>Александр & Лиана — 5 сентября 2026</title>
+  <meta name="description" content="Свадебное приглашение Александра и Лианы — Нежность среди гор.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Cormorant+SC:wght@500;600;700&family=Great+Vibes&family=Marck+Script&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
 </head>
-
-<body>
-<!-- ====================================== -->
-<!-- NAVIGATION -->
-<!-- ====================================== -->
-
-<header id="header">
-
-    <div class="container">
-
-        <nav class="navbar">
-
-            <a href="#hero" class="logo">
-
-                Александр <span>&</span> Лиана
-
-            </a>
-
-            <ul class="nav-menu">
-
-                <li><a href="#story">История</a></li>
-
-                <li><a href="#timeline">Наш путь</a></li>
-
-                <li><a href="#day">День свадьбы</a></li>
-
-                <li><a href="#location">Локация</a></li>
-
-                <li><a href="#gallery">Галерея</a></li>
-
-                <li><a href="#dress-code">Dress Code</a></li>
-
-                <li><a href="#rsvp">RSVP</a></li>
-
-            </ul>
-
-            <button id="burger" class="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
-
-                <span></span>
-
-                <span></span>
-
-                <span></span>
-
-            </button>
-
-        </nav>
-
-    </div>
-
-</header>
-
-
-
-<!-- ====================================== -->
-<!-- WELCOME -->
-<!-- ====================================== -->
-
-<section id="welcome">
-
-    <div class="welcome-content">
-
-        <h1>
-
-            Добро пожаловать
-
-        </h1>
-
-        <p>
-
-            Перед вами не просто приглашение.
-
-            Это небольшая история.
-
-        </p>
-
-        <p class="welcome-subtitle">
-
-            Выберите настроение этого путешествия
-
-        </p>
-
-        <div class="atmosphere-select">
-
-            <div class="atmosphere-card" data-atmosphere="nature">
-
-                <img
-                    src="icons/nature.svg"
-                    alt="Атмосфера места">
-
-                <span>
-
-                    Атмосфера места
-
-                </span>
-
-            </div>
-
-            <div class="atmosphere-card" data-atmosphere="music">
-
-                <img
-                    src="icons/music.svg"
-                    alt="Наша музыка">
-
-                <span>
-
-                    Наша музыка
-
-                </span>
-
-            </div>
-
-            <div class="atmosphere-card" data-atmosphere="silent">
-
-                <img
-                    src="icons/silence.svg"
-                    alt="Тишина">
-
-                <span>
-
-                    Тишина
-
-                </span>
-
-            </div>
-
-        </div>
-
-        <button
-            id="startJourney"
-            type="button"
-            disabled>
-
-            Начать путешествие
-
-        </button>
-
-    </div>
-
-</section>
+<body class="prelaunch">
 
 <audio id="backgroundAudio" preload="auto"></audio>
 
-<button
-    id="audioToggle"
-    class="audio-toggle"
-    type="button"
-    aria-label="Поставить атмосферу на паузу"
-    aria-pressed="true"
-    hidden>
+<header id="header" class="site-header hero-mode">
+  <div class="container">
+    <nav class="navbar">
+      <a href="#hero" class="logo" aria-label="На главную">
+        <span class="logo-mark">A&L</span>
+        <span class="logo-copy" aria-live="polite">
+          <span class="logo-label logo-invitation">Свадебное приглашение</span>
+          <span class="logo-label logo-names">Александр &amp; Лиана</span>
+        </span>
+      </a>
 
-    <span class="audio-toggle-icon" aria-hidden="true">♫</span>
-    <span id="audioToggleLabel" class="audio-toggle-label">Атмосфера</span>
+      <button id="burger" class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
 
+      <ul id="navMenu" class="nav-menu">
+        <li><a href="#story">История</a></li>
+        <li><a href="#timeline">Наш путь</a></li>
+        <li><a href="#day">День свадьбы</a></li>
+        <li><a href="#location">Локация</a></li>
+        <li><a href="#gallery">Галерея</a></li>
+        <li><a href="#dress-code">Дресс-код</a></li>
+        <li><a href="#rsvp">Анкета</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="welcome" class="welcome-screen">
+  <div class="welcome-card reveal active">
+    <div id="leafMascotWelcome" class="leaf-mascot welcome-leaf" aria-hidden="true">
+      <img src="images/leaf-mascot.png" alt="">
+    </div>
+
+    <span class="welcome-kicker">Нежность среди гор</span>
+    <h1>Добро пожаловать</h1>
+    <p class="welcome-lead">Перед вами не просто приглашение. Это небольшая история о нашем дне и людях, с которыми мы хотим его разделить.</p>
+    <p class="welcome-subtitle">Как вы хотите прожить это приглашение?</p>
+
+    <div class="atmosphere-grid">
+      <button class="atmosphere-card" type="button" data-atmosphere="nature">
+        <img src="icons/nature.svg" alt="" aria-hidden="true">
+        <strong>Атмосфера места</strong>
+        <span>Нежная мелодия гор и флейты</span>
+      </button>
+      <button class="atmosphere-card" type="button" data-atmosphere="music">
+        <img src="icons/music.svg" alt="" aria-hidden="true">
+        <strong>Наша музыка</strong>
+        <span>Красивая песня для настроения</span>
+      </button>
+      <button class="atmosphere-card" type="button" data-atmosphere="silent">
+        <img src="icons/silence.svg" alt="" aria-hidden="true">
+        <strong>Тишина</strong>
+        <span>Только вы и история нашего дня</span>
+      </button>
+    </div>
+
+    <button id="startJourney" class="primary-btn" type="button" disabled>Открыть приглашение</button>
+  </div>
+</section>
+
+<button id="audioToggle" class="audio-toggle" type="button" hidden aria-label="Пауза или воспроизведение атмосферы">
+  <span class="audio-toggle-icon">♪</span>
+  <span id="audioToggleLabel">Атмосфера</span>
 </button>
 
-
-<!-- ====================================== -->
-<!-- HERO -->
-<!-- ====================================== -->
-
-<section id="hero">
-
-    <div class="hero-content">
-
-        <p>
-
-            5 сентября 2026
-
-        </p>
-
-        <h1>
-
-            Александр
-
-            <span>&</span>
-
-            Лиана
-
-        </h1>
-
-        <div class="hero-divider"></div>
-
-        <p>
-
-            С огромной радостью приглашаем вас
-            разделить с нами
-            один из самых счастливых дней
-            нашей жизни.
-
-        </p>
-
-
+<main id="siteContent">
+  <section id="hero" class="hero-section section-shell">
+    <div class="container hero-layout reveal">
+      <h1 class="hero-names">Александр <span class="hero-amp">&amp;</span> Лиана</h1>
+      <p class="hero-invite-line">приглашают на свадьбу</p>
+      <p class="hero-date">5 сентября 2026</p>
+      <div class="section-divider"></div>
+      <div class="invitation-text centered">
+        <p>В нашей жизни предстоят счастливые перемены! Мы хотим, чтобы в этот день рядом с нами были самые близкие и дорогие для нас люди. Будем рады разделить с вами чудесный праздник в день нашей свадьбы.</p>
+      </div>
+      <div class="hero-photo-card reveal active">
+        <img src="images/intro-couple.jpg" alt="Александр и Лиана">
+      </div>
     </div>
-
-    <div class="leaf" aria-hidden="true">
-        🍃
+    <img class="section-decor decor-right decor-hero" src="images/decor/decor-1.png" alt="" aria-hidden="true">
+    <div id="leafMascotFloating" class="leaf-mascot floating-leaf" aria-hidden="true" hidden>
+      <img src="images/leaf-mascot.png" alt="">
     </div>
+  </section>
 
-</section>
+  <section id="story" class="section-shell">
+    <img class="section-decor decor-left" src="images/decor/decor-2.png" alt="" aria-hidden="true">
+    <div class="container narrow reveal">
+      <p class="section-subtitle">Наша история</p>
+      <h2 class="section-title">Всё началось с маленькой встречи</h2>
+      <div class="section-divider"></div>
+      <div class="story-text">
+        <p>Иногда жизнь меняется совершенно неожиданно. Одна встреча, один взгляд, один разговор — и уже невозможно представить, что когда‑то всё было иначе.</p>
+        <p>Именно так началась наша история. И теперь мы будем счастливы разделить с вами день, который станет её новой красивой главой.</p>
+      </div>
+    </div>
+  </section>
 
-<!-- ====================================== -->
-<!-- STORY -->
-<!-- ====================================== -->
+  <section id="timeline" class="section-shell soft-section">
+    <div class="container reveal">
+      <p class="section-subtitle">Наш путь</p>
+      <h2 class="section-title">Моменты, которые привели нас сюда</h2>
+      <div class="section-divider"></div>
 
-<section id="story" class="reveal">
+      <div class="timeline">
+        <article class="timeline-item">
+          <div class="timeline-year">2024</div>
+          <div class="timeline-card">
+            <h3>Первая встреча</h3>
+            <p>Иногда самые большие истории начинаются совершенно случайно.</p>
+          </div>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-year">2025</div>
+          <div class="timeline-card">
+            <h3>Первое путешествие</h3>
+            <p>Мы поняли, что счастье — это быть рядом и смотреть в одну сторону.</p>
+          </div>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-year">2026</div>
+          <div class="timeline-card">
+            <h3>Предложение</h3>
+            <p>Именно тогда началась новая глава нашей жизни — глава о семье.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
 
-    <div class="container">
+  <section id="day" class="section-shell">
+    <img class="section-decor decor-right" src="images/decor/decor-3.png" alt="" aria-hidden="true">
+    <div class="container reveal">
+      <p class="section-subtitle">День свадьбы</p>
+      <h2 class="section-title">Как пройдет этот день</h2>
+      <div class="section-divider"></div>
 
-        <p class="section-subtitle">
+      <div class="countdown" aria-label="Обратный отсчёт до дня свадьбы">
+        <div class="countdown-item"><span id="days">42</span><small id="daysLabel">дня</small></div>
+        <div class="countdown-item"><span id="hours">00</span><small id="hoursLabel">часов</small></div>
+        <div class="countdown-item"><span id="minutes">00</span><small id="minutesLabel">минут</small></div>
+        <div class="countdown-item"><span id="seconds">00</span><small id="secondsLabel">секунд</small></div>
+      </div>
 
-            Наша история
+      <div class="schedule-grid">
+        <article class="schedule-item reveal"><div class="time">15:30</div><div><h3>Сбор гостей</h3><p>Начинаем встречать самых дорогих людей.</p></div></article>
+        <article class="schedule-item reveal"><div class="time">16:00</div><div><h3>Венчание</h3><p>Самый трепетный и важный момент нашего дня.</p></div></article>
+        <article class="schedule-item reveal"><div class="time">17:30</div><div><h3>Банкет</h3><p>Тёплые слова, музыка, радость и праздник рядом с близкими.</p></div></article>
+        <article class="schedule-item reveal"><div class="time">20:00</div><div><h3>Торт</h3><p>Сладкий момент, который хочется разделить вместе.</p></div></article>
+        <article class="schedule-item reveal"><div class="time">21:00</div><div><h3>Завершение</h3><p>Красивое завершение счастливого дня и дорогих сердцу воспоминаний.</p></div></article>
+      </div>
+    </div>
+  </section>
 
-        </p>
+  <section id="location" class="section-shell soft-section">
+    <img class="section-decor decor-left" src="images/decor/decor-4.png" alt="" aria-hidden="true">
+    <div class="container reveal">
+      <p class="section-subtitle">Локация</p>
+      <h2 class="section-title">Где мы встретимся</h2>
+      <div class="section-divider"></div>
 
-        <h2 class="section-title">
+      <div class="location-photo-card reveal active">
+        <img src="images/location-venue.jpg" alt="Место проведения свадьбы среди гор">
+      </div>
 
-            Всё началось
-            с маленькой встречи
+      <div class="location-copy-box">
+        <h3>Гостевой дом «Домики»</h3>
 
-        </h2>
+        <div class="location-actions-block">
+          <button id="locationAddressToggle" class="location-address-trigger" type="button" aria-expanded="false" aria-controls="locationActions">
+            <img src="icons/location.svg" alt="" aria-hidden="true">
+            <span>
+              <strong>г. Карачаевск, ул. Пушкина, 127</strong>
+              <small>Нажмите на адрес</small>
+            </span>
+            <i class="location-address-chevron" aria-hidden="true"></i>
+          </button>
 
-        <div class="section-divider"></div>
+          <div id="locationActions" class="location-actions" hidden style="display:none">
+            <button id="copyAddress" type="button" class="action-chip">Скопировать</button>
+            <a href="https://yandex.ru/maps/-/CTVwZ4KQ" target="_blank" rel="noopener noreferrer" class="action-chip">Построить маршрут</a>
+          </div>
 
-        <div class="story-text">
+          <p id="copyStatus" class="copy-status" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <p>
+  <section id="gallery" class="section-shell">
+    <img class="section-decor decor-left" src="images/decor/decor-3.png" alt="" aria-hidden="true">
+    <img class="section-decor decor-right" src="images/decor/decor-4.png" alt="" aria-hidden="true">
+    <div class="container reveal">
+      <p class="section-subtitle">Галерея</p>
+      <h2 class="section-title">Наша история в кадрах</h2>
+      <div class="section-divider"></div>
+      <p class="section-description">Немного тёплых моментов, которые передают настроение нашего дня.</p>
 
-                Иногда жизнь меняется
-                совершенно неожиданно.
+      <div class="gallery-carousel">
+        <button class="gallery-nav gallery-prev" type="button" aria-label="Предыдущее фото">‹</button>
+        <div class="gallery-viewport" id="galleryViewport">
+          <div class="gallery-track" id="galleryTrack">
+            <button class="gallery-item" type="button"><img src="gallery/photo1.jpg" alt="Александр и Лиана на прогулке"></button>
+            <button class="gallery-item" type="button"><img src="gallery/photo2.jpg" alt="Пара в красивом природном пейзаже"></button>
+            <button class="gallery-item" type="button"><img src="gallery/photo3.jpg" alt="Пара показывает кольцо"></button>
+            <button class="gallery-item" type="button"><img src="gallery/photo4.jpg" alt="Фотография пары"></button>
+            <button class="gallery-item" type="button"><img src="gallery/photo5.jpg" alt="Фотография пары"></button>
+            <button class="gallery-item" type="button"><img src="gallery/photo6.jpg" alt="Фотография пары"></button>
+		<button class="gallery-item" type="button"><img src="gallery/photo7.jpg" alt="Фотография пары"></button>
+          </div>
+        </div>
+        <button class="gallery-nav gallery-next" type="button" aria-label="Следующее фото">›</button>
+      </div>
+    </div>
+  </section>
 
-            </p>
+  <section id="details" class="section-shell soft-section">
+    <img class="section-decor decor-right" src="images/decor/decor-1.png" alt="" aria-hidden="true">
+    <div class="container reveal">
+      <p class="section-subtitle">Важные детали</p>
+      <h2 class="section-title">Немного о нашем празднике</h2>
+      <div class="section-divider"></div>
 
-            <p>
+      <div class="details-grid">
+        <article class="detail-card reveal">
+          <img src="icons/gift.svg" alt="" aria-hidden="true">
+          <h3>Подарок</h3>
+          <p>Мы не хотим обременять вас выбором подарка, поэтому будем рады вкладу в бюджет нашей молодой семьи.</p>
+        </article>
+        <article class="detail-card reveal">
+          <img src="icons/heart.svg" alt="" aria-hidden="true">
+          <h3>Горько</h3>
+          <p>От всего сердца просим вас воздержаться от криков «Горько!» и сохранить атмосферу уютного семейного праздника.</p>
+        </article>
+        <article class="detail-card reveal">
+          <img src="icons/dress.svg" alt="" aria-hidden="true">
+          <h3>Дресс‑код</h3>
+          <p>Вы будете украшением вечера, если в вашем наряде будут присутствовать цвета нашей цветовой гаммы.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-                Именно так началась
-                наша история.
+  <section id="dress-code" class="section-shell">
+    <img class="section-decor decor-left" src="images/decor/decor-2.png" alt="" aria-hidden="true">
+    <div class="container reveal">
+      <p class="section-subtitle">Дресс‑код</p>
+      <h2 class="section-title">Цветовая гамма нашего дня</h2>
+      <div class="section-divider"></div>
+      <p class="section-description">Нам будет особенно приятно, если в ваших образах появятся эти нежные и природные оттенки.</p>
 
-            </p>
+      <div class="palette-desktop" aria-label="Цветовая палитра свадьбы">
+        <span class="color-dot color-1"></span>
+        <span class="color-dot color-2"></span>
+        <span class="color-dot color-3"></span>
+        <span class="color-dot color-4"></span>
+        <span class="color-dot color-5"></span>
+        <span class="color-dot color-6"></span>
+      </div>
 
+      <div class="palette-mobile-card" aria-hidden="true">
+        <img src="images/palette-mobile.png" alt="Палитра цветов свадьбы">
+        <div class="mobile-palette-overlay">
+          <span class="color-dot color-6 wave-dot"></span>
+          <span class="color-dot color-5 wave-dot"></span>
+          <span class="color-dot color-3 wave-dot"></span>
+          <span class="color-dot color-2 wave-dot"></span>
+          <span class="color-dot color-1 wave-dot"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rsvp" class="section-shell soft-section">
+    <img class="section-decor decor-left" src="images/decor/decor-1.png" alt="" aria-hidden="true">
+    <div class="container reveal">
+      <p class="section-subtitle">Анкета гостя</p>
+      <h2 class="section-title">Будем рады вашему ответу</h2>
+      <div class="section-divider"></div>
+      <p class="section-description">Пожалуйста, заполните небольшую анкету, чтобы мы могли лучше подготовиться к нашему дню.</p>
+
+      <form id="rsvpForm" class="rsvp-card">
+        <div class="form-grid">
+          <label class="field">
+            <span>Ваше имя и фамилия</span>
+            <input type="text" name="name" placeholder="Например, Анна Петрова" required>
+          </label>
+
+          <label class="field">
+            <span>Телефон</span>
+            <input type="tel" name="phone" placeholder="+7 (___) ___‑__‑__" required>
+          </label>
         </div>
 
+        <fieldset class="attendance-box">
+          <legend>Сможете ли вы присутствовать?</legend>
+          <div class="attendance-options">
+            <label class="choice-pill"><input type="radio" name="attendance" value="yes" required><span>С радостью приду</span></label>
+            <label class="choice-pill"><input type="radio" name="attendance" value="no"><span>К сожалению, не смогу</span></label>
+          </div>
+        </fieldset>
+
+        <label class="field full-width">
+          <span>Комментарий</span>
+          <textarea name="message" rows="5" placeholder="Если хотите, можете написать пожелание или уточнение"></textarea>
+        </label>
+
+        <button type="submit" class="primary-btn submit-btn">Отправить анкету</button>
+        <p id="rsvpMessage" class="form-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="site-footer section-shell">
+  <div class="footer-backdrop">
+    <img src="gallery/hands-rings.png" alt="" aria-hidden="true">
+  </div>
+  <div class="container footer-content reveal">
+    <p class="footer-topline">Если Вы готовите творческое поздравление или у Вас возникли вопросы, пожалуйста, свяжитесь с нашим ведущим</p>
+    <div class="footer-phone-icon"><img src="icons/phone.svg" alt="" aria-hidden="true"></div>
+
+    <div class="footer-contacts">
+      <div class="footer-contact-item">
+        <span>Ведущий</span>
+        <a href="tel:+79282376107">+7 928 237 6107</a>
+      </div>
+      <div class="footer-contact-item">
+        <span>Невеста</span>
+        <a href="tel:+79897873055">+7 989 787 3055</a>
+      </div>
     </div>
 
-</section>
-
-<!-- ====================================== -->
-<!-- TIMELINE -->
-<!-- ====================================== -->
-
-<section id="timeline">
-
-    <div class="container">
-
-        <div class="timeline stagger">
-
-            <article class="timeline-item">
-
-                <div class="timeline-year">2021</div>
-
-                <div class="timeline-card">
-
-                    <h3>Первая встреча</h3>
-
-                    <p>
-                        Иногда самые большие истории
-                        начинаются совершенно случайно.
-                    </p>
-
-                </div>
-
-            </article>
-
-            <article class="timeline-item">
-
-                <div class="timeline-year">2022</div>
-
-                <div class="timeline-card">
-
-                    <h3>Первое путешествие</h3>
-
-                    <p>
-                        Мы поняли,
-                        что счастье —
-                        это быть рядом.
-                    </p>
-
-                </div>
-
-            </article>
-
-            <article class="timeline-item">
-
-                <div class="timeline-year">2025</div>
-
-                <div class="timeline-card">
-
-                    <h3>Предложение</h3>
-
-                    <p>
-                        Именно тогда
-                        началась новая глава
-                        нашей жизни.
-                    </p>
-
-                </div>
-
-            </article>
-
-        </div>
-
+    <div class="footer-signoff">
+      <p>Будем рады видеть Вас!</p>
+      <h2>Ваши Александр и Лиана</h2>
+      <small>05 • 09 • 2026</small>
     </div>
-
-</section>
-
-<!-- ====================================== -->
-<!-- WEDDING DAY -->
-<!-- ====================================== -->
-
-<section id="day" class="reveal">
-
-    <div class="container">
-
-        <p class="section-subtitle">
-    День свадьбы
-</p>
-
-<h2 class="section-title">
-    Как пройдет
-    этот день
-</h2>
-
-<div class="section-divider"></div>
-<div class="countdown">
-
-    <div class="countdown-item">
-
-        <span id="days">000</span>
-
-        <small>дней</small>
-
-    </div>
-
-    <div class="countdown-item">
-
-        <span id="hours">00</span>
-
-        <small>часов</small>
-
-    </div>
-
-    <div class="countdown-item">
-
-        <span id="minutes">00</span>
-
-        <small>минут</small>
-
-    </div>
-
-    <div class="countdown-item">
-
-        <span id="seconds">00</span>
-
-        <small>секунд</small>
-
-    </div>
-
-</div>
-
-        <div class="schedule stagger">
-
-            <div class="schedule-item">
-
-                <div class="time">
-
-                    15:30
-
-                </div>
-
-                <div>
-
-                    <h3>
-
-                        Сбор гостей
-
-                    </h3>
-
-                    <p>
-
-                        Начинаем встречать
-                        самых дорогих людей.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="schedule-item">
-
-                <div class="time">
-
-                    16:00
-
-                </div>
-
-                <div>
-
-                    <h3>
-
-                        Церемония
-
-                    </h3>
-
-                    <p>
-
-                        Самый важный момент
-                        этого дня.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="schedule-item">
-
-                <div class="time">
-
-                    17:00
-
-                </div>
-
-                <div>
-
-                    <h3>
-
-                        Фотографии
-
-                    </h3>
-
-                    <p>
-
-                        Немного времени
-                        для красивых кадров.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="schedule-item">
-
-                <div class="time">
-
-                    18:00
-
-                </div>
-
-                <div>
-
-                    <h3>
-
-                        Банкет
-
-                    </h3>
-
-                    <p>
-
-                        Вкусный ужин,
-                        музыка,
-                        танцы
-                        и теплые слова.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="schedule-item">
-
-                <div class="time">
-
-                    22:00
-
-                </div>
-
-                <div>
-
-                    <h3>
-
-                        Финал вечера
-
-                    </h3>
-
-                    <p>
-
-                        Красивое завершение
-                        самого счастливого дня.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ====================================== -->
-<!-- LOCATION -->
-<!-- ====================================== -->
-
-<section id="location" class="reveal">
-
-    <div class="container">
-
-        <p class="section-subtitle">
-            Локация
-        </p>
-
-        <h2 class="section-title">
-            Где мы встретимся
-        </h2>
-
-        <div class="section-divider"></div>
-
-        <div class="location-photo"></div>
-
-        <h3>
-            Гостевой дом «Домики»
-        </h3>
-
-        <div class="location-address-wrap">
-
-            <button
-                id="locationAddressToggle"
-                class="location-address-trigger"
-                type="button"
-                aria-expanded="false"
-                aria-controls="locationActions">
-
-                <img src="icons/location.svg" alt="" aria-hidden="true">
-
-                <span class="location-address-copy">
-                    <strong>г. Карачаевск, ул. Пушкина, 127</strong>
-                    <small>Нажмите на адрес</small>
-                </span>
-
-                <span class="location-address-chevron" aria-hidden="true"></span>
-
-            </button>
-
-            <div id="locationActions" class="location-actions" hidden>
-
-                <button
-                    id="copyAddress"
-                    type="button"
-                    class="location-action">
-                    Скопировать
-                </button>
-
-                <a
-                    href="https://yandex.ru/maps/-/CTVwZ4KQ"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="location-action">
-                    Построить маршрут
-                </a>
-
-            </div>
-
-            <p id="copyStatus" class="location-copy-status" aria-live="polite"></p>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ====================================== -->
-<!-- GALLERY -->
-<!-- ====================================== -->
-
-<section id="gallery" class="reveal">
-
-    <div class="container">
-
-        <p class="section-subtitle">
-            Галерея
-        </p>
-
-        <h2 class="section-title">
-            Наша история в кадрах
-        </h2>
-
-        <div class="section-divider"></div>
-
-        <p class="gallery-text">
-
-            Здесь скоро появятся фотографии
-            нашей предсвадебной истории.
-
-        </p>
-
-        <div class="gallery-grid">
-
-            <div class="gallery-item">
-                <img src="gallery/photo1.jpg" alt="">
-            </div>
-
-            <div class="gallery-item">
-                <img src="gallery/photo2.jpg" alt="">
-            </div>
-
-            <div class="gallery-item">
-                <img src="gallery/photo3.jpg" alt="">
-            </div>
-
-            <div class="gallery-item">
-                <img src="gallery/photo4.jpg" alt="">
-            </div>
-
-            <div class="gallery-item">
-                <img src="gallery/photo5.jpg" alt="">
-            </div>
-
-            <div class="gallery-item">
-                <img src="gallery/photo6.jpg" alt="">
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ====================================== -->
-<!-- DRESS CODE -->
-<!-- ====================================== -->
-
-<section id="dress-code" class="reveal">
-
-    <div class="container">
-
-        <p class="section-subtitle">
-            Dress Code
-        </p>
-
-        <h2 class="section-title">
-            Нам будет особенно приятно,
-            если Вы поддержите цветовую гамму нашего праздника
-        </h2>
-
-        <div class="section-divider"></div>
-
-        <p class="dress-text">
-
-            Мы будем рады, если в Вашем образе
-            будут присутствовать оттенки нашей свадебной палитры.
-
-        </p>
-
-        <div class="dress-palette">
-
-            <span style="background:#EFE8E2;"></span>
-            <span style="background:#D8C5B4;"></span>
-            <span style="background:#B78C74;"></span>
-            <span style="background:#8A5D49;"></span>
-            <span style="background:#6E2233;"></span>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ====================================== -->
-<!-- RSVP -->
-<!-- ====================================== -->
-
-<section id="rsvp" class="reveal">
-
-    <div class="container">
-
-        <p class="section-subtitle">
-            RSVP
-        </p>
-
-        <h2 class="section-title">
-            Пожалуйста, подтвердите своё присутствие
-        </h2>
-
-        <div class="section-divider"></div>
-
-        <p class="rsvp-text">
-
-            Нам будет очень приятно узнать Ваш ответ
-            до <strong>15 августа 2026 года</strong>.
-
-        </p>
-
-        <div class="rsvp-card">
-
-            <form id="rsvpForm">
-
-                <div class="rsvp-field">
-                    <label for="guestName">Ваше имя и фамилия</label>
-                    <input
-                        type="text"
-                        id="guestName"
-                        name="guestName"
-                        autocomplete="name"
-                        placeholder="Например, Анна Иванова"
-                        required>
-                </div>
-
-                <fieldset class="attendance-fieldset">
-                    <legend>Сможете быть с нами?</legend>
-
-                    <div class="attendance-options">
-                        <label class="attendance-option">
-                            <input
-                                type="radio"
-                                name="guestAnswer"
-                                value="yes"
-                                required>
-                            <span class="attendance-option-content">
-                                <span class="attendance-option-icon" aria-hidden="true">✓</span>
-                                <span>С удовольствием приду</span>
-                            </span>
-                        </label>
-
-                        <label class="attendance-option">
-                            <input
-                                type="radio"
-                                name="guestAnswer"
-                                value="no"
-                                required>
-                            <span class="attendance-option-content">
-                                <span class="attendance-option-icon" aria-hidden="true">×</span>
-                                <span>К сожалению, не смогу</span>
-                            </span>
-                        </label>
-                    </div>
-                </fieldset>
-
-                <div class="rsvp-field">
-                    <label for="guestComment">Пожелание или комментарий</label>
-                    <textarea
-                        id="guestComment"
-                        name="guestComment"
-                        rows="4"
-                        placeholder="Здесь можно оставить сообщение для нас"></textarea>
-                </div>
-
-                <button type="submit" class="rsvp-submit">
-                    <span>Отправить ответ</span>
-                    <span aria-hidden="true">→</span>
-                </button>
-
-                <p class="rsvp-note">Заполнение займёт меньше минуты</p>
-
-            </form>
-
-            <p id="rsvpMessage" role="status" aria-live="polite"></p>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ====================================== -->
-<!-- FOOTER -->
-<!-- ====================================== -->
-
-<footer id="footer" class="reveal">
-
-    <div class="container">
-
-        <div class="footer-divider">
-
-            <img src="icons/divider.svg" alt="">
-
-        </div>
-
-        <p class="footer-text">
-
-            Если Вы готовите творческое поздравление
-            <br>
-            или у Вас возникли вопросы,
-
-            <br><br>
-
-            пожалуйста,
-            свяжитесь с нашим ведущим
-
-        </p>
-
-        <div class="footer-contact">
-
-            <img src="icons/phone.svg" alt="">
-
-            <div>
-
-                <h4>Ведущий</h4>
-
-                <a href="tel:+79282376107">
-
-                    +7 928 237 6107
-
-                </a>
-
-            </div>
-
-        </div>
-
-        <p class="footer-contact-note">
-            Если ведущий временно недоступен,
-            можно связаться с невестой.
-        </p>
-
-        <div class="footer-contact reserve">
-
-            <img src="icons/heart.svg" alt="">
-
-            <div>
-
-                <h4>Невеста</h4>
-
-                <a href="tel:+79897873055">
-
-                    +7 989 787 3055
-
-                </a>
-
-            </div>
-
-        </div>
-
-        <div class="footer-divider">
-
-            <img src="icons/divider.svg" alt="">
-
-        </div>
-
-        <p class="footer-love">
-
-            С любовью
-
-        </p>
-
-        <h2 class="footer-names">
-
-            Александр & Лиана
-
-        </h2>
-
-        <p class="footer-date">
-
-            05 • 09 • 2026
-
-        </p>
-
-    </div>
-
+  </div>
 </footer>
 
-<div id="lightbox" aria-hidden="true">
-
-    <span id="lightboxClose" role="button" tabindex="0" aria-label="Закрыть фотографию">&times;</span>
-
-    <img id="lightboxImage" src="" alt="">
-
+<div id="lightbox" class="lightbox" hidden>
+  <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Закрыть">×</button>
+  <img id="lightboxImage" src="" alt="Просмотр фотографии">
 </div>
 
 </body>
-
 </html>
