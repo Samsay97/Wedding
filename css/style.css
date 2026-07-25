@@ -131,11 +131,52 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .welcome-leaf { width: 74px; top: 18px; right: 24px; animation: leafBob 3s ease-in-out infinite; }
 .floating-leaf { width: 72px; right: 4%; top: 18%; opacity: .88; animation: leafFloatPath 8s ease-in-out infinite; }
 
-.audio-toggle { position: fixed; right: 18px; bottom: 18px; z-index: 950; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 16px; border-radius: 999px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.34); color: #fff; backdrop-filter: blur(18px); box-shadow: 0 16px 35px rgba(30, 18, 12, .22); transition: transform var(--transition), opacity var(--transition), background var(--transition); }
+.audio-toggle {
+
+ position: fixed;
+ right: 18px;
+ bottom: 18px;
+ z-index: 950;
+
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+
+ min-height: 52px;
+ padding: 0 16px;
+
+ border-radius: 999px;
+
+ /* чуть темнее стекло */
+ background: rgba(92, 70, 55, .28);
+
+ border: 1px solid rgba(255,255,255,.45);
+
+ /* более читаемый цвет */
+ color: #fffaf5;
+
+ backdrop-filter: blur(18px);
+
+ box-shadow:
+    0 16px 35px rgba(30,18,12,.28);
+
+ transition:
+    transform var(--transition),
+    opacity var(--transition),
+    background var(--transition);
+}
 .audio-toggle:hover { transform: translateY(-2px); }
 .audio-toggle.is-paused { opacity: .82; }
-.audio-toggle-icon { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.22); }
+.audio-toggle-icon { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.35); color:#6b5140;}
 .audio-toggle[hidden] { display: none; }
+.audio-toggle.is-compact {
+
+ background: rgba(92,70,55,.38);
+
+ box-shadow:
+ 0 12px 30px rgba(30,18,12,.32);
+
+}
 /* ==========================================================
    AUDIO COMPACT MODE
    овал превращается в стеклянный круг
