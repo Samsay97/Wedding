@@ -140,6 +140,37 @@ const WeddingApp = {
 
     },
 
+/* =======================================
+REVEAL
+======================================= */
+
+const reveals=document.querySelectorAll(".reveal");
+
+const revealObserver=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("active");
+
+}
+
+});
+
+},{
+
+threshold:.18
+
+});
+
+reveals.forEach(section=>{
+
+revealObserver.observe(section);
+
+});
+
+
     /* ==========================================================
        LEAF
     ========================================================== */
@@ -273,6 +304,28 @@ class RSVPForm {
 
 }
 
+/* =======================================
+RSVP
+======================================= */
+
+const rsvpForm=document.getElementById("rsvpForm");
+
+if(rsvpForm){
+
+rsvpForm.addEventListener("submit",(e)=>{
+
+e.preventDefault();
+
+document.getElementById("rsvpMessage").textContent=
+
+"Спасибо! Мы получили Ваш ответ 🤍";
+
+rsvpForm.reset();
+
+});
+
+}
+
 /* ==========================================================
 COUNTDOWN
 ========================================================== */
@@ -402,6 +455,73 @@ class MusicPlayer{
         }
 
         this.playing=!this.playing;
+
+    }
+
+}
+
+
+/* =======================================
+MUSIC
+======================================= */
+
+const audio = document.getElementById("backgroundAudio");
+
+const tracks = {
+
+    nature: "music/nature.mp3",
+
+    music: "music/music.mp3"
+
+};
+
+function fadeIn(target = 0.15){
+
+    audio.volume = 0;
+
+    audio.play().catch(()=>{});
+
+    const step = 0.01;
+
+    const interval = setInterval(()=>{
+
+        if(audio.volume >= target){
+
+            clearInterval(interval);
+
+        }else{
+
+            audio.volume = Math.min(target, audio.volume + step);
+
+        }
+
+    },120);
+
+}
+
+function startSelectedAtmosphere(){
+
+    const selected = localStorage.getItem("weddingAtmosphere");
+
+    if(selected === "silence") return;
+
+    if(selected === "nature"){
+
+        audio.src = tracks.nature;
+
+        audio.loop = true;
+
+        fadeIn();
+
+    }
+
+    if(selected === "music"){
+
+        audio.src = tracks.music;
+
+        audio.loop = true;
+
+        fadeIn();
 
     }
 
@@ -642,98 +762,162 @@ if(savedAtmosphere){
 
 }
 
-/* ==========================================================
+/* =======================================
 WELCOME
-========================================================== */
+======================================= */
 
-const welcome = document.getElementById("welcome");
+const welcome=document.getElementById("welcome");
 
-const hero = document.getElementById("hero");
+const hero=document.getElementById("hero");
 
-const startButton = document.getElementById("startJourney");
+const startJourney=document.getElementById("startJourney");
 
-const cards = document.querySelectorAll(".atmosphere-card");
+const atmosphereCards=document.querySelectorAll(".atmosphere-card");
 
-const music = document.getElementById("music");
+let selectedAtmosphere=null;
 
-let selectedAtmosphere = null;
+atmosphereCards.forEach(card=>{
 
+card.addEventListener("click",()=>{
 
+atmosphereCards.forEach(c=>c.classList.remove("active"));
 
-cards.forEach(card=>{
+card.classList.add("active");
 
-    card.addEventListener("click",()=>{
+selectedAtmosphere=card.dataset.atmosphere;
 
-        cards.forEach(item=>item.classList.remove("active"));
+localStorage.setItem("weddingAtmosphere",selectedAtmosphere);
 
-        card.classList.add("active");
-
-        selectedAtmosphere = card.dataset.atmosphere;
-
-        localStorage.setItem("atmosphere",selectedAtmosphere);
-
-        startButton.disabled = false;
-
-    });
+startJourney.disabled=false;
 
 });
 
+});
 
-
-const saved = localStorage.getItem("atmosphere");
+const saved=localStorage.getItem("weddingAtmosphere");
 
 if(saved){
 
-    const active=document.querySelector(
+const active=document.querySelector(`.atmosphere-card[data-atmosphere="${saved}"]`);
 
-        `.atmosphere-card[data-atmosphere="${saved}"]`
+if(active){
 
-    );
+active.classList.add("active");
 
-    if(active){
+selectedAtmosphere=saved;
 
-        active.classList.add("active");
-
-        selectedAtmosphere=saved;
-
-        startButton.disabled=false;
-
-    }
+startJourney.disabled=false;
 
 }
 
+}
 
+startJourney.addEventListener("click",()=>{
 
-startButton.addEventListener("click",()=>{
+welcome.classList.add("hide");
 
-    if(!selectedAtmosphere) return;
+startSelectedAtmosphere();
 
+setTimeout(()=>{
 
+hero.classList.add("show");
 
-    if(selectedAtmosphere==="music"){
+hero.classList.add("show");
 
-        music.src="audio/music.mp3";
+hero.classList.add("hero-show");
 
-        music.volume=.15;
+hero.scrollIntoView({
 
-        music.play().catch(()=>{});
-
-    }
-
-
-
-    if(selectedAtmosphere==="nature"){
-
-        music.src="audio/nature.mp3";
-
-        music.volume=.15;
-
-        music.play().catch(()=>{});
-
-    }
-
-
-
-    welcome.classList.add("hide");
+behavior:"smooth"
 
 });
+
+},700);
+
+});
+
+
+/* =======================================
+COPY ADDRESS
+======================================= */
+
+const copyButton=document.getElementById("copyAddress");
+
+if(copyButton){
+
+    copyButton.addEventListener("click",()=>{
+
+        navigator.clipboard.writeText(
+
+            "г. Карачаевск, ул. Пушкина, 127 (Гостевой дом Домики)"
+
+        );
+
+        copyButton.textContent="Адрес скопирован ✓";
+
+        setTimeout(()=>{
+
+            copyButton.textContent="Скопировать адрес";
+
+        },2000);
+
+    });
+
+}
+
+/* =======================================
+LIGHTBOX
+======================================= */
+
+const galleryImages=document.querySelectorAll(".gallery-item img");
+
+const lightbox=document.getElementById("lightbox");
+
+const lightboxImage=document.getElementById("lightboxImage");
+
+const lightboxClose=document.getElementById("lightboxClose");
+
+galleryImages.forEach(image=>{
+
+image.addEventListener("click",()=>{
+
+lightboxImage.src=image.src;
+
+lightbox.classList.add("active");
+
+document.body.style.overflow="hidden";
+
+});
+
+});
+
+function closeLightbox(){
+
+lightbox.classList.remove("active");
+
+document.body.style.overflow="";
+
+}
+
+lightboxClose.addEventListener("click",closeLightbox);
+
+lightbox.addEventListener("click",(e)=>{
+
+if(e.target===lightbox){
+
+closeLightbox();
+
+}
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="Escape"){
+
+closeLightbox();
+
+}
+
+});
+

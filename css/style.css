@@ -77,6 +77,55 @@ margin:auto;
 
 }
 
+/* ==========================================
+GLOBAL TYPOGRAPHY
+========================================== */
+
+h1{
+
+font-size:clamp(42px,7vw,86px);
+
+line-height:1.1;
+
+}
+
+h2{
+
+font-size:clamp(30px,5vw,58px);
+
+line-height:1.2;
+
+}
+
+h3{
+
+font-size:clamp(22px,3vw,32px);
+
+}
+
+p{
+
+font-size:clamp(16px,2vw,20px);
+
+line-height:1.8;
+
+}
+
+button,
+.route-btn,
+.copy-btn{
+
+font-size:clamp(15px,2vw,17px);
+
+}
+
+.section-subtitle{
+
+font-size:clamp(12px,1.8vw,15px);
+
+letter-spacing:.28em;
+
+}
 /* ==========================================================
 TYPOGRAPHY
 ========================================================== */
@@ -396,6 +445,57 @@ margin:15px 0;
 color:var(--cabernet);
 
 font-size:60px;
+
+}
+
+/* ==========================================
+HERO ANIMATION
+========================================== */
+
+.hero-date,
+.hero-title,
+.hero-text,
+.hero-scroll{
+
+opacity:0;
+
+transform:translateY(28px);
+
+}
+
+.hero-show .hero-date{
+
+animation:heroFade .8s .15s forwards;
+
+}
+
+.hero-show .hero-title{
+
+animation:heroFade .8s .45s forwards;
+
+}
+
+.hero-show .hero-text{
+
+animation:heroFade .8s .75s forwards;
+
+}
+
+.hero-show .hero-scroll{
+
+animation:heroFade .8s 1.05s forwards;
+
+}
+
+@keyframes heroFade{
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
 
 }
 
@@ -791,6 +891,103 @@ box-shadow:
 
 }
 
+.location-address{
+
+    margin:25px 0;
+
+    font-size:20px;
+
+    line-height:1.8;
+
+}
+
+.location-address a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(110,34,51,.2);
+
+    transition:.3s;
+
+}
+
+.location-address a:hover{
+
+    color:var(--accent);
+
+    border-color:var(--accent);
+
+}
+
+.location-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    margin-top:35px;
+
+}
+
+.route-btn,
+.copy-btn{
+
+    min-width:220px;
+
+    padding:16px 28px;
+
+    border-radius:999px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.35s;
+
+}
+
+.route-btn{
+
+    background:var(--accent);
+
+    color:#fff;
+
+    text-decoration:none;
+
+}
+
+.route-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.copy-btn{
+
+    background:#fff;
+
+    color:var(--accent);
+
+    border:1px solid rgba(110,34,51,.15);
+
+}
+
+.copy-btn:hover{
+
+    background:#faf7f6;
+
+    transform:translateY(-3px);
+
+}
+
 /* ==========================================================
 DRESS CODE
 ========================================================== */
@@ -882,6 +1079,61 @@ max-width:650px;
 margin:auto;
 
 }
+
+/* ==========================================
+DRESS CODE
+========================================== */
+
+.dress-text{
+
+    max-width:700px;
+
+    margin:0 auto 45px;
+
+    text-align:center;
+
+    line-height:1.8;
+
+    opacity:.82;
+
+}
+
+.dress-palette{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:22px;
+
+    flex-wrap:wrap;
+
+}
+
+.dress-palette span{
+
+    width:78px;
+
+    height:78px;
+
+    border-radius:50%;
+
+    border:4px solid #fff;
+
+    box-shadow:
+
+        0 12px 30px rgba(0,0,0,.12);
+
+    transition:.35s;
+
+}
+
+.dress-palette span:hover{
+
+    transform:translateY(-6px) scale(1.05);
+
+}
+
 
 /* ==========================================================
 RSVP
@@ -985,6 +1237,104 @@ box-shadow:
 
 }
 
+/* ==========================================
+RSVP
+========================================== */
+
+.rsvp-text{
+
+text-align:center;
+
+max-width:650px;
+
+margin:0 auto 40px;
+
+line-height:1.8;
+
+opacity:.82;
+
+}
+
+#rsvpForm{
+
+max-width:560px;
+
+margin:auto;
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+}
+
+#rsvpForm input,
+#rsvpForm select,
+#rsvpForm textarea{
+
+padding:18px 20px;
+
+border-radius:16px;
+
+border:1px solid rgba(0,0,0,.08);
+
+font:inherit;
+
+background:#fff;
+
+transition:.3s;
+
+}
+
+#rsvpForm input:focus,
+#rsvpForm select:focus,
+#rsvpForm textarea:focus{
+
+outline:none;
+
+border-color:var(--accent);
+
+box-shadow:0 0 0 4px rgba(110,34,51,.08);
+
+}
+
+#rsvpForm button{
+
+padding:18px;
+
+border:none;
+
+border-radius:999px;
+
+background:var(--accent);
+
+color:#fff;
+
+cursor:pointer;
+
+transition:.35s;
+
+}
+
+#rsvpForm button:hover{
+
+transform:translateY(-3px);
+
+}
+
+#rsvpMessage{
+
+margin-top:25px;
+
+text-align:center;
+
+font-weight:600;
+
+color:var(--accent);
+
+}
+
 /* ==========================================================
 FOOTER
 ========================================================== */
@@ -1016,6 +1366,121 @@ font-size:20px;
 line-height:2;
 
 }
+
+/* ==========================================
+FOOTER
+========================================== */
+
+footer{
+
+padding:120px 0 80px;
+
+text-align:center;
+
+}
+
+.footer-divider{
+
+margin:25px auto 45px;
+
+}
+
+.footer-divider img{
+
+width:170px;
+
+opacity:.85;
+
+}
+
+.footer-text{
+
+line-height:1.9;
+
+opacity:.82;
+
+margin-bottom:45px;
+
+}
+
+.footer-contact{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:18px;
+
+margin:28px 0;
+
+}
+
+.footer-contact img{
+
+width:26px;
+
+height:26px;
+
+}
+
+.footer-contact h4{
+
+margin-bottom:6px;
+
+font-size:16px;
+
+font-weight:600;
+
+}
+
+.footer-contact a{
+
+text-decoration:none;
+
+color:inherit;
+
+transition:.3s;
+
+}
+
+.footer-contact a:hover{
+
+color:var(--accent);
+
+}
+
+.reserve{
+
+margin-bottom:55px;
+
+}
+
+.footer-love{
+
+font-style:italic;
+
+opacity:.75;
+
+margin-bottom:14px;
+
+}
+
+.footer-names{
+
+margin-bottom:12px;
+
+}
+
+.footer-date{
+
+letter-spacing:4px;
+
+opacity:.75;
+
+}
+
 
 /* ==========================================================
 PRELOADER ANIMATION
@@ -1067,7 +1532,7 @@ opacity:0;
 
 transform:
 
-translateY(70px)
+translateY(60px)
 
 scale(.96);
 
@@ -1090,6 +1555,15 @@ opacity,
 transform,
 
 filter;
+
+}
+.reveal{
+
+opacity:0;
+
+transform:translateY(60px);
+
+transition:1s ease;
 
 }
 
@@ -1452,13 +1926,13 @@ COUNTDOWN
 
 .countdown{
 
-display:flex;
+display:grid;
+
+grid-template-columns:repeat(4,minmax(90px,150px));
 
 justify-content:center;
 
-gap:24px;
-
-flex-wrap:wrap;
+gap:18px;
 
 margin:70px 0;
 
@@ -1466,11 +1940,11 @@ margin:70px 0;
 
 .countdown-item{
 
-width:150px;
+width:100%;
 
-padding:30px 20px;
+padding:28px 18px;
 
-background:white;
+background:#fff;
 
 border-radius:24px;
 
@@ -1484,7 +1958,7 @@ transition:var(--transition);
 
 .countdown-item:hover{
 
-transform:translateY(-8px);
+transform:translateY(-6px);
 
 }
 
@@ -1494,45 +1968,52 @@ display:block;
 
 font-family:"Cormorant Garamond",serif;
 
-font-size:58px;
+font-size:clamp(34px,5vw,58px);
 
 color:var(--cabernet);
 
 line-height:1;
 
-margin-bottom:12px;
+margin-bottom:10px;
 
 }
 
 .countdown-item small{
 
-font-size:14px;
+display:block;
 
-letter-spacing:.15em;
+font-size:clamp(11px,1.8vw,14px);
+
+letter-spacing:.12em;
 
 text-transform:uppercase;
 
 color:#777;
 
+white-space:nowrap;
+
 }
 
 @media(max-width:768px){
 
+.countdown{
+
+grid-template-columns:repeat(4,1fr);
+
+gap:10px;
+
+}
+
 .countdown-item{
 
-width:120px;
+padding:18px 10px;
 
-padding:22px;
-
-}
-
-.countdown-item span{
-
-font-size:42px;
+border-radius:18px;
 
 }
 
 }
+
 
 /* ==========================================================
 MUSIC
@@ -1728,6 +2209,85 @@ grid-template-columns:1fr;
 
 }
 
+/* ==========================================
+GALLERY
+========================================== */
+
+.gallery-text{
+
+    text-align:center;
+
+    max-width:700px;
+
+    margin:0 auto 55px;
+
+    line-height:1.8;
+
+    opacity:.8;
+
+}
+
+.gallery-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:22px;
+
+}
+
+.gallery-item{
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    aspect-ratio:4/5;
+
+    background:#f6f3f2;
+
+    cursor:pointer;
+
+}
+
+.gallery-item img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.7s;
+
+}
+
+.gallery-item:hover img{
+
+    transform:scale(1.05);
+
+}
+
+@media(max-width:900px){
+
+.gallery-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:650px){
+
+.gallery-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
 /* ==========================================================
 HERO CINEMATIC
 ========================================================== */
@@ -2411,6 +2971,294 @@ cursor:not-allowed;
 transform:translateY(-3px);
 
 }
+
+/* ==========================================
+WELCOME TRANSITION
+========================================== */
+
+#hero{
+
+opacity:0;
+
+transform:translateY(40px);
+
+transition:1s ease;
+
+}
+
+#hero.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+#welcome{
+
+transition:1s ease;
+
+}
+
+#welcome.hide{
+
+opacity:0;
+
+visibility:hidden;
+
+pointer-events:none;
+
+transform:scale(1.02);
+
+}
+
+#startJourney:disabled{
+
+opacity:.45;
+
+cursor:not-allowed;
+
+}
+
+#startJourney{
+
+transition:.35s;
+
+}
+
+#startJourney:not(:disabled):hover{
+
+transform:translateY(-4px);
+
+}
+
+
+/* ==========================================
+LUXURY PASS
+========================================== */
+
+section{
+
+padding:140px 0;
+
+}
+
+.container{
+
+width:min(1180px,92%);
+
+margin:auto;
+
+padding:0;
+
+}
+
+.section-subtitle{
+
+margin-bottom:14px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+opacity:.65;
+
+}
+
+.section-title{
+
+max-width:760px;
+
+margin:0 auto;
+
+line-height:1.3;
+
+}
+
+.section-divider{
+
+margin:34px auto 70px;
+
+}
+
+button,
+.route-btn,
+.copy-btn{
+
+transition:
+
+transform .35s,
+
+box-shadow .35s,
+
+background .35s,
+
+color .35s;
+
+}
+
+button:hover,
+.route-btn:hover,
+.copy-btn:hover{
+
+box-shadow:0 18px 35px rgba(0,0,0,.12);
+
+}
+
+.gallery-item,
+.location-photo,
+.timeline-card,
+.story-card{
+
+transition:
+
+transform .45s,
+
+box-shadow .45s;
+
+}
+
+.gallery-item:hover,
+.timeline-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 25px 45px rgba(0,0,0,.12);
+
+}
+
+@media(max-width:900px){
+
+section{
+
+padding:110px 0;
+
+}
+
+.section-divider{
+
+margin:28px auto 50px;
+
+}
+
+}
+
+@media(max-width:600px){
+
+section{
+
+padding:90px 0;
+
+}
+
+.container{
+
+padding:0 20px;
+
+}
+
+}
+
+/* ==========================================
+LIGHTBOX
+========================================== */
+
+#lightbox{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.92);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+opacity:0;
+
+visibility:hidden;
+
+transition:.35s;
+
+z-index:9999;
+
+backdrop-filter:blur(6px);
+
+}
+
+#lightbox.active{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+#lightboxImage{
+
+max-width:90%;
+
+max-height:88%;
+
+border-radius:18px;
+
+transform:scale(.92);
+
+transition:.35s;
+
+box-shadow:0 30px 80px rgba(0,0,0,.4);
+
+}
+
+#lightbox.active #lightboxImage{
+
+transform:scale(1);
+
+}
+
+#lightboxClose{
+
+position:absolute;
+
+top:35px;
+
+right:45px;
+
+font-size:46px;
+
+color:#fff;
+
+cursor:pointer;
+
+user-select:none;
+
+transition:.3s;
+
+}
+
+#lightboxClose:hover{
+
+transform:rotate(90deg);
+
+}
+
+@media(max-width:768px){
+
+#lightboxClose{
+
+top:20px;
+
+right:24px;
+
+font-size:36px;
+
+}
+
+}
+
 /* ==========================================================
 END
 ========================================================== */

@@ -62,30 +62,7 @@
 
 </header>
 
-<!-- ====================================== -->
-<!-- PRELOADER -->
-<!-- ====================================== -->
 
-<div id="preloader">
-
-    <div class="preloader-content">
-
-        <div class="preloader-leaf">🍃
-	</div>
-
-        <p>
-
-            Добро пожаловать...
-
-        </p>
-
-    </div>
-
-</div>
-
-<!-- ====================================== -->
-<!-- WELCOME -->
-<!-- ====================================== -->
 
 <!-- ====================================== -->
 <!-- WELCOME -->
@@ -120,7 +97,7 @@
             <div class="atmosphere-card" data-atmosphere="nature">
 
                 <img
-                    src="img/icons/nature.svg"
+                    src="icons/nature.svg"
                     alt="Атмосфера места">
 
                 <span>
@@ -134,7 +111,7 @@
             <div class="atmosphere-card" data-atmosphere="music">
 
                 <img
-                    src="img/icons/music.svg"
+                    src="icons/music.svg"
                     alt="Наша музыка">
 
                 <span>
@@ -148,7 +125,7 @@
             <div class="atmosphere-card" data-atmosphere="silent">
 
                 <img
-                    src="img/icons/silence.svg"
+                    src="icons/silence.svg"
                     alt="Тишина">
 
                 <span>
@@ -173,6 +150,9 @@
 
 </section>
 
+<audio id="backgroundAudio" preload="auto"></audio>
+
+
 <!-- ====================================== -->
 <!-- HERO -->
 <!-- ====================================== -->
@@ -183,7 +163,7 @@
 
         <p>
 
-            12 сентября 2026
+            5 сентября 2026
 
         </p>
 
@@ -221,11 +201,12 @@
     </div>
 
 </section>
+
 <!-- ====================================== -->
 <!-- STORY -->
 <!-- ====================================== -->
 
-<section id="story">
+<section id="story" class="reveal">
 
     <div class="container">
 
@@ -339,7 +320,7 @@
 <!-- WEDDING DAY -->
 <!-- ====================================== -->
 
-<section id="day">
+<section id="day" class="reveal">
 
     <div class="container">
 
@@ -534,15 +515,12 @@
 
 </section>
 
-<!-- ====================================== -->
-<!-- LOCATION -->
-<!-- ====================================== -->
 
 <!-- ====================================== -->
 <!-- LOCATION -->
 <!-- ====================================== -->
 
-<section id="location">
+<section id="location" class="reveal">
 
     <div class="container">
 
@@ -556,49 +534,41 @@
 
         <div class="section-divider"></div>
 
-        <div class="location-photo">
-
-            <!-- Здесь позже будет фотография -->
-
-        </div>
+        <div class="location-photo"></div>
 
         <h3>
-
             Гостевой дом «Домики»
-
         </h3>
 
-        <p id="address">
+        <p class="location-address">
 
-            Республика Карачаево-Черкесия
+            <a
+                href="https://yandex.ru/maps/-/CTVwZ4KQ"
+                target="_blank">
 
-            <br>
+                г. Карачаевск,
+                ул. Пушкина, 127
 
-            г. Карачаевск
-
-            <br>
-
-            ул. Пушкина, д. 127
+            </a>
 
         </p>
 
         <div class="location-buttons">
 
             <a
-                class="route-button"
                 href="https://yandex.ru/maps/-/CTVwZ4KQ"
                 target="_blank"
-                rel="noopener">
+                class="route-btn">
 
-                🧭 Построить маршрут
+                Построить маршрут
 
             </a>
 
             <button
-                id="copy-address"
-                class="copy-button">
+                id="copyAddress"
+                class="copy-btn">
 
-                📋 Скопировать адрес
+                Скопировать адрес
 
             </button>
 
@@ -606,38 +576,58 @@
 
     </div>
 
-</section><!-- ====================================== -->
+</section>
+
+<!-- ====================================== -->
 <!-- GALLERY -->
 <!-- ====================================== -->
 
-<section id="gallery">
+<section id="gallery" class="reveal">
 
     <div class="container">
 
         <p class="section-subtitle">
-            Наши моменты
+            Галерея
         </p>
 
         <h2 class="section-title">
-            Немного
-            нашей истории
+            Наша история в кадрах
         </h2>
 
         <div class="section-divider"></div>
 
-        <div class="gallery-grid stagger">
+        <p class="gallery-text">
 
-            <img src="images/photo1.jpg" alt="Фото 1">
+            Здесь скоро появятся фотографии
+            нашей предсвадебной истории.
 
-            <img src="images/photo2.jpg" alt="Фото 2">
+        </p>
 
-            <img src="images/photo3.jpg" alt="Фото 3">
+        <div class="gallery-grid">
 
-            <img src="images/photo4.jpg" alt="Фото 4">
+            <div class="gallery-item">
+                <img src="gallery/photo1.jpg" alt="">
+            </div>
 
-            <img src="images/photo5.jpg" alt="Фото 5">
+            <div class="gallery-item">
+                <img src="gallery/photo2.jpg" alt="">
+            </div>
 
-            <img src="images/photo6.jpg" alt="Фото 6">
+            <div class="gallery-item">
+                <img src="gallery/photo3.jpg" alt="">
+            </div>
+
+            <div class="gallery-item">
+                <img src="gallery/photo4.jpg" alt="">
+            </div>
+
+            <div class="gallery-item">
+                <img src="gallery/photo5.jpg" alt="">
+            </div>
+
+            <div class="gallery-item">
+                <img src="gallery/photo6.jpg" alt="">
+            </div>
 
         </div>
 
@@ -645,52 +635,41 @@
 
 </section>
 
-<div id="lightbox">
-
-    <span id="closeLightbox">&times;</span>
-
-    <img id="lightboxImage">
-
-</div>
-
 <!-- ====================================== -->
 <!-- DRESS CODE -->
 <!-- ====================================== -->
 
-<section id="dress-code">
+<section id="dress-code" class="reveal">
 
     <div class="container">
 
         <p class="section-subtitle">
-    Dress Code
-</p>
+            Dress Code
+        </p>
 
-<h2 class="section-title">
-    Нам будет приятно,
-    если вы поддержите
-    атмосферу нашего праздника
-</h2>
+        <h2 class="section-title">
+            Нам будет особенно приятно,
+            если Вы поддержите цветовую гамму нашего праздника
+        </h2>
 
-<div class="section-divider"></div>
+        <div class="section-divider"></div>
 
-        <div class="palette">
+        <p class="dress-text">
 
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-
-        </div>
-
-        <p>
-
-            Светлые,
-            теплые,
-            спокойные оттенки.
+            Мы будем рады, если в Вашем образе
+            будут присутствовать оттенки нашей свадебной палитры.
 
         </p>
+
+        <div class="dress-palette">
+
+            <span style="background:#EFE8E2;"></span>
+            <span style="background:#D8C5B4;"></span>
+            <span style="background:#B78C74;"></span>
+            <span style="background:#8A5D49;"></span>
+            <span style="background:#6E2233;"></span>
+
+        </div>
 
     </div>
 
@@ -700,56 +679,71 @@
 <!-- RSVP -->
 <!-- ====================================== -->
 
-<section id="rsvp">
+<section id="rsvp" class="reveal">
 
     <div class="container">
 
         <p class="section-subtitle">
-    RSVP
-</p>
+            RSVP
+        </p>
 
-<h2 class="section-title">
-    Мы будем счастливы
-    увидеть вас
-</h2>
+        <h2 class="section-title">
+            Пожалуйста, подтвердите своё присутствие
+        </h2>
 
-<div class="section-divider"></div>
+        <div class="section-divider"></div>
 
-        <form>
+        <p class="rsvp-text">
+
+            Нам будет очень приятно,
+            если Вы сообщите о своём решении
+            до <strong>15 августа 2026</strong>.
+
+        </p>
+
+        <form id="rsvpForm">
 
             <input
                 type="text"
-                placeholder="Ваше имя">
+                id="guestName"
+                placeholder="Ваше имя"
+                required>
 
-            <select>
+            <select id="guestAnswer" required>
 
-                <option>
-
-                    Смогу присутствовать
-
+                <option value="">
+                    Выберите вариант
                 </option>
 
-                <option>
+                <option value="yes">
+                    С удовольствием приду
+                </option>
 
-                    К сожалению,
-                    не смогу
-
+                <option value="no">
+                    К сожалению, не смогу
                 </option>
 
             </select>
 
             <textarea
-                placeholder="Пожелания (необязательно)">
+
+                id="guestComment"
+
+                rows="4"
+
+                placeholder="Пожелание или комментарий (необязательно)">
 
             </textarea>
 
             <button type="submit">
 
-                Отправить ответ
+                Отправить
 
             </button>
 
         </form>
+
+        <p id="rsvpMessage"></p>
 
     </div>
 
@@ -759,32 +753,92 @@
 <!-- FOOTER -->
 <!-- ====================================== -->
 
-<footer id="footer">
+<footer id="footer" class="reveal">
 
     <div class="container">
 
-        <h2>
+        <div class="footer-divider">
 
-            Спасибо,
-            что будете рядом
-            в этот день ❤️
+            <img src="icons/divider.svg" alt="">
+
+        </div>
+
+        <p class="footer-text">
+
+            Если Вы готовите творческое поздравление
+            <br>
+            или у Вас возникли вопросы,
+
+            <br><br>
+
+            пожалуйста,
+            свяжитесь с нашим ведущим
+
+        </p>
+
+        <div class="footer-contact">
+
+            <img src="icons/phone.svg" alt="">
+
+            <div>
+
+                <h4>Ведущий</h4>
+
+                <a href="tel:+79282376107">
+
+                    +7 928 237 6107
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="footer-contact reserve">
+
+            <img src="icons/heart.svg" alt="">
+
+            <div>
+
+                <h4>Резервный контакт</h4>
+
+                <a href="tel:+79897873055">
+
+                    Лиана · +7 989 787 3055
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="footer-divider">
+
+            <img src="icons/divider.svg" alt="">
+
+        </div>
+
+        <p class="footer-love">
+
+            С любовью
+
+        </p>
+
+        <h2 class="footer-names">
+
+            Александр & Лиана
 
         </h2>
 
-        <p>
+        <p class="footer-date">
 
-            С любовью,
-
-            Александр
-            и
-            Лиана
+            05 • 09 • 2026
 
         </p>
 
     </div>
 
 </footer>
-<script src="js/script.js"></script>
 
 <!-- ====================================== -->
 <!-- MUSIC -->
@@ -801,6 +855,15 @@
     ♫
 
 </button>
+
+<div id="lightbox">
+
+    <span id="lightboxClose">&times;</span>
+
+    <img id="lightboxImage" src="" alt="">
+
+</div>
+
 </body>
 
 </html>
