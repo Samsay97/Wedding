@@ -154,6 +154,19 @@
 
 <audio id="backgroundAudio" preload="auto"></audio>
 
+<button
+    id="audioToggle"
+    class="audio-toggle"
+    type="button"
+    aria-label="Поставить атмосферу на паузу"
+    aria-pressed="true"
+    hidden>
+
+    <span class="audio-toggle-icon" aria-hidden="true">♫</span>
+    <span id="audioToggleLabel" class="audio-toggle-label">Атмосфера</span>
+
+</button>
+
 
 <!-- ====================================== -->
 <!-- HERO -->
@@ -190,11 +203,6 @@
 
         </p>
 
-        <a href="#story">
-
-            Начать путешествие
-
-        </a>
 
     </div>
 
@@ -542,39 +550,46 @@
             Гостевой дом «Домики»
         </h3>
 
-        <p class="location-address">
-
-            <a
-                href="https://yandex.ru/maps/-/CTVwZ4KQ"
-                target="_blank"
-                rel="noopener noreferrer">
-
-                г. Карачаевск,
-                ул. Пушкина, 127
-
-            </a>
-
-        </p>
-
-        <div class="location-buttons">
-
-            <a
-                href="https://yandex.ru/maps/-/CTVwZ4KQ"
-                target="_blank"
-                class="route-btn">
-
-                Построить маршрут
-
-            </a>
+        <div class="location-address-wrap">
 
             <button
-                id="copyAddress"
+                id="locationAddressToggle"
+                class="location-address-trigger"
                 type="button"
-                class="copy-btn">
+                aria-expanded="false"
+                aria-controls="locationActions">
 
-                Скопировать адрес
+                <img src="icons/location.svg" alt="" aria-hidden="true">
+
+                <span class="location-address-copy">
+                    <strong>г. Карачаевск, ул. Пушкина, 127</strong>
+                    <small>Нажмите на адрес</small>
+                </span>
+
+                <span class="location-address-chevron" aria-hidden="true"></span>
 
             </button>
+
+            <div id="locationActions" class="location-actions" hidden>
+
+                <button
+                    id="copyAddress"
+                    type="button"
+                    class="location-action">
+                    Скопировать
+                </button>
+
+                <a
+                    href="https://yandex.ru/maps/-/CTVwZ4KQ"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="location-action">
+                    Построить маршрут
+                </a>
+
+            </div>
+
+            <p id="copyStatus" class="location-copy-status" aria-live="polite"></p>
 
         </div>
 
@@ -699,55 +714,77 @@
 
         <p class="rsvp-text">
 
-            Нам будет очень приятно,
-            если Вы сообщите о своём решении
-            до <strong>15 августа 2026</strong>.
+            Нам будет очень приятно узнать Ваш ответ
+            до <strong>15 августа 2026 года</strong>.
 
         </p>
 
-        <form id="rsvpForm">
+        <div class="rsvp-card">
 
-            <input
-                type="text"
-                id="guestName"
-                placeholder="Ваше имя"
-                required>
+            <form id="rsvpForm">
 
-            <select id="guestAnswer" required>
+                <div class="rsvp-field">
+                    <label for="guestName">Ваше имя и фамилия</label>
+                    <input
+                        type="text"
+                        id="guestName"
+                        name="guestName"
+                        autocomplete="name"
+                        placeholder="Например, Анна Иванова"
+                        required>
+                </div>
 
-                <option value="">
-                    Выберите вариант
-                </option>
+                <fieldset class="attendance-fieldset">
+                    <legend>Сможете быть с нами?</legend>
 
-                <option value="yes">
-                    С удовольствием приду
-                </option>
+                    <div class="attendance-options">
+                        <label class="attendance-option">
+                            <input
+                                type="radio"
+                                name="guestAnswer"
+                                value="yes"
+                                required>
+                            <span class="attendance-option-content">
+                                <span class="attendance-option-icon" aria-hidden="true">✓</span>
+                                <span>С удовольствием приду</span>
+                            </span>
+                        </label>
 
-                <option value="no">
-                    К сожалению, не смогу
-                </option>
+                        <label class="attendance-option">
+                            <input
+                                type="radio"
+                                name="guestAnswer"
+                                value="no"
+                                required>
+                            <span class="attendance-option-content">
+                                <span class="attendance-option-icon" aria-hidden="true">×</span>
+                                <span>К сожалению, не смогу</span>
+                            </span>
+                        </label>
+                    </div>
+                </fieldset>
 
-            </select>
+                <div class="rsvp-field">
+                    <label for="guestComment">Пожелание или комментарий</label>
+                    <textarea
+                        id="guestComment"
+                        name="guestComment"
+                        rows="4"
+                        placeholder="Здесь можно оставить сообщение для нас"></textarea>
+                </div>
 
-            <textarea
+                <button type="submit" class="rsvp-submit">
+                    <span>Отправить ответ</span>
+                    <span aria-hidden="true">→</span>
+                </button>
 
-                id="guestComment"
+                <p class="rsvp-note">Заполнение займёт меньше минуты</p>
 
-                rows="4"
+            </form>
 
-                placeholder="Пожелание или комментарий (необязательно)">
+            <p id="rsvpMessage" role="status" aria-live="polite"></p>
 
-            </textarea>
-
-            <button type="submit">
-
-                Отправить
-
-            </button>
-
-        </form>
-
-        <p id="rsvpMessage"></p>
+        </div>
 
     </div>
 
@@ -798,17 +835,22 @@
 
         </div>
 
+        <p class="footer-contact-note">
+            Если ведущий временно недоступен,
+            можно связаться с невестой.
+        </p>
+
         <div class="footer-contact reserve">
 
             <img src="icons/heart.svg" alt="">
 
             <div>
 
-                <h4>Резервный контакт</h4>
+                <h4>Невеста</h4>
 
                 <a href="tel:+79897873055">
 
-                    Лиана · +7 989 787 3055
+                    +7 989 787 3055
 
                 </a>
 

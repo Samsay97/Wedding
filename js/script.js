@@ -20,6 +20,7 @@ const WeddingApp = {
         new Countdown();
         new Gallery();
         new Navigation();
+        new LocationActions();
         new CopyAddress();
     },
 
@@ -106,6 +107,8 @@ class WelcomeScene {
         this.startButton = document.getElementById("startJourney");
         this.cards = [...document.querySelectorAll(".atmosphere-card")];
         this.audio = document.getElementById("backgroundAudio");
+        this.audioToggle = document.getElementById("audioToggle");
+        this.audioToggleLabel = document.getElementById("audioToggleLabel");
 
         const saved = localStorage.getItem("weddingAtmosphere");
         this.selected = saved === "silence" ? "silent" : saved;
@@ -117,6 +120,7 @@ class WelcomeScene {
         this.bind();
         this.restoreSelection();
         this.updateButton();
+        this.updateAudioToggle();
     }
 
     bind() {
@@ -141,12 +145,18 @@ class WelcomeScene {
             this.startAtmosphere();
             this.welcome.classList.add("hide");
 
-            setTimeout(() => {
+            window.setTimeout(() => {
                 this.welcome.hidden = true;
                 this.hero.classList.add("show", "hero-show");
                 this.hero.scrollIntoView({ behavior: "smooth", block: "start" });
             }, 700);
         });
+
+        if (this.audioToggle && this.audio) {
+            this.audioToggle.addEventListener("click", () => this.toggleAudio());
+            this.audio.addEventListener("play", () => this.updateAudioToggle());
+            this.audio.addEventListener("pause", () => this.updateAudioToggle());
+        }
     }
 
     select(card) {
@@ -194,6 +204,7 @@ class WelcomeScene {
             this.audio.pause();
             this.audio.removeAttribute("src");
             this.audio.load();
+            this.hideAudioToggle();
             return;
         }
 
@@ -209,10 +220,62 @@ class WelcomeScene {
         this.audio.src = source;
         this.audio.loop = true;
         this.audio.volume = 0;
+        this.showAudioToggle();
 
         this.audio.play()
-            .then(() => this.fadeIn())
-            .catch(error => console.warn("Не удалось запустить аудио:", error));
+            .then(() => {
+                this.fadeIn();
+                this.updateAudioToggle();
+            })
+            .catch(error => {
+                console.warn("Не удалось запустить аудио:", error);
+                this.updateAudioToggle();
+            });
+    }
+
+    toggleAudio() {
+        if (!this.audio || this.selected === "silent") return;
+
+        if (this.audio.paused) {
+            if (!this.audio.getAttribute("src")) {
+                this.startAtmosphere();
+                return;
+            }
+
+            this.audio.play()
+                .then(() => this.updateAudioToggle())
+                .catch(error => console.warn("Не удалось продолжить аудио:", error));
+        } else {
+            this.audio.pause();
+        }
+    }
+
+    showAudioToggle() {
+        if (!this.audioToggle) return;
+        this.audioToggle.hidden = false;
+        requestAnimationFrame(() => this.audioToggle.classList.add("visible"));
+    }
+
+    hideAudioToggle() {
+        if (!this.audioToggle) return;
+        this.audioToggle.classList.remove("visible", "playing");
+        this.audioToggle.hidden = true;
+    }
+
+    updateAudioToggle() {
+        if (!this.audioToggle || !this.audio) return;
+
+        const isPlaying = !this.audio.paused && Boolean(this.audio.currentSrc);
+        this.audioToggle.classList.toggle("playing", isPlaying);
+        this.audioToggle.setAttribute("aria-pressed", String(isPlaying));
+        this.audioToggle.setAttribute(
+            "aria-label",
+            isPlaying ? "Поставить атмосферу на паузу" : "Продолжить атмосферу"
+        );
+
+        if (this.audioToggleLabel) {
+            this.audioToggleLabel.textContent = isPlaying ? "Атмосфера" : "Продолжить";
+        }
     }
 
     fadeIn(targetVolume = 0.15) {
@@ -253,19 +316,22 @@ class RSVPForm {
             return;
         }
 
+        const originalButtonContent = this.button ? this.button.innerHTML : "";
+
         if (this.button) {
             this.button.disabled = true;
-            this.button.textContent = "Отправляем...";
+            this.button.innerHTML = "<span>Отправляем...</span>";
         }
 
         window.setTimeout(() => {
             if (this.message) {
                 this.message.textContent = "Спасибо! Мы получили Ваш ответ 🤍";
+                this.message.classList.add("visible");
             }
 
             if (this.button) {
                 this.button.disabled = false;
-                this.button.textContent = "Отправить";
+                this.button.innerHTML = originalButtonContent;
             }
 
             this.form.reset();
@@ -370,6 +436,8 @@ class Navigation {
         this.burger = document.getElementById("burger");
         this.menu = document.querySelector(".nav-menu");
         this.lastScroll = window.scrollY;
+        this.scrollThreshold = 7;
+        this.ticking = false;
 
         if (!this.header || !this.burger || !this.menu) return;
 
@@ -381,13 +449,17 @@ class Navigation {
             const opened = this.menu.classList.toggle("active");
             this.burger.classList.toggle("active", opened);
             this.burger.setAttribute("aria-expanded", String(opened));
+
+            if (opened) {
+                this.header.classList.remove("hide");
+            }
         });
 
         this.menu.querySelectorAll("a").forEach(link => {
             link.addEventListener("click", () => this.closeMenu());
         });
 
-        window.addEventListener("scroll", () => this.onScroll(), { passive: true });
+        window.addEventListener("scroll", () => this.requestScrollUpdate(), { passive: true });
     }
 
     closeMenu() {
@@ -396,16 +468,73 @@ class Navigation {
         this.burger.setAttribute("aria-expanded", "false");
     }
 
-    onScroll() {
-        const currentScroll = window.scrollY;
+    requestScrollUpdate() {
+        if (this.ticking) return;
 
-        if (currentScroll < 120 || currentScroll < this.lastScroll) {
+        this.ticking = true;
+        window.requestAnimationFrame(() => {
+            this.onScroll();
+            this.ticking = false;
+        });
+    }
+
+    onScroll() {
+        const currentScroll = Math.max(0, window.scrollY);
+        const difference = currentScroll - this.lastScroll;
+
+        if (this.menu.classList.contains("active") || currentScroll < 90) {
             this.header.classList.remove("hide");
-        } else {
+            this.lastScroll = currentScroll;
+            return;
+        }
+
+        if (Math.abs(difference) < this.scrollThreshold) {
+            return;
+        }
+
+        if (difference > 0) {
             this.header.classList.add("hide");
+            this.closeMenu();
+        } else {
+            this.header.classList.remove("hide");
         }
 
         this.lastScroll = currentScroll;
+    }
+}
+
+/* ==========================================================
+   LOCATION ACTIONS
+========================================================== */
+
+class LocationActions {
+    constructor() {
+        this.toggle = document.getElementById("locationAddressToggle");
+        this.actions = document.getElementById("locationActions");
+
+        if (!this.toggle || !this.actions) return;
+
+        this.bind();
+    }
+
+    bind() {
+        this.toggle.addEventListener("click", () => this.setOpen(this.actions.hidden));
+
+        document.addEventListener("click", event => {
+            if (this.actions.hidden) return;
+            if (this.toggle.contains(event.target) || this.actions.contains(event.target)) return;
+            this.setOpen(false);
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") this.setOpen(false);
+        });
+    }
+
+    setOpen(opened) {
+        this.actions.hidden = !opened;
+        this.toggle.classList.toggle("active", opened);
+        this.toggle.setAttribute("aria-expanded", String(opened));
     }
 }
 
@@ -416,6 +545,7 @@ class Navigation {
 class CopyAddress {
     constructor() {
         this.button = document.getElementById("copyAddress");
+        this.status = document.getElementById("copyStatus");
         if (!this.button) return;
 
         this.originalText = this.button.textContent.trim();
@@ -438,9 +568,12 @@ class CopyAddress {
             textarea.remove();
         }
 
-        this.button.textContent = "Адрес скопирован ✓";
+        this.button.textContent = "Скопировано ✓";
+        if (this.status) this.status.textContent = "Адрес скопирован";
+
         window.setTimeout(() => {
             this.button.textContent = this.originalText;
+            if (this.status) this.status.textContent = "";
         }, 2000);
     }
 }
