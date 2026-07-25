@@ -500,32 +500,273 @@ class GalleryLightbox {
 }
 
 class RSVPForm {
+
   constructor() {
+
     this.form = document.getElementById("rsvpForm");
     this.message = document.getElementById("rsvpMessage");
+
     if (!this.form) return;
-    this.submitButton = this.form.querySelector("button[type='submit']");
+
+
+    this.submitButton = this.form.querySelector(
+      "button[type='submit']"
+    );
+
+
+    this.storageKey = "wedding_rsvp_sent";
+
+
     this.bind();
+
+    this.checkAlreadySent();
+
   }
+
+
+
   bind() {
-    this.form.addEventListener("submit", event => {
-      event.preventDefault();
-      if (!this.form.reportValidity()) return;
-      this.sendMock();
-    });
-  }
-  sendMock() {
-    if (this.submitButton) {
-      this.submitButton.disabled = true;
-      this.submitButton.textContent = "Отправляем...";
-    }
-    setTimeout(() => {
-      if (this.submitButton) {
-        this.submitButton.disabled = false;
-        this.submitButton.textContent = "Отправить анкету";
+
+
+    this.form.addEventListener(
+      "submit",
+      (event) => {
+
+        event.preventDefault();
+
+
+        if (!this.form.reportValidity()) return;
+
+
+        this.sendToTelegram();
+
       }
-      if (this.message) this.message.textContent = "Спасибо! Мы получили ваш ответ и будем очень рады видеть вас.";
+    );
+
+
+  }
+
+
+
+  checkAlreadySent() {
+
+
+    const sentTime = localStorage.getItem(
+      this.storageKey
+    );
+
+
+    if (!sentTime) return;
+
+
+
+    const hoursPassed =
+      (Date.now() - Number(sentTime))
+      / 1000
+      / 60
+      / 60;
+
+
+
+    if (hoursPassed < 24) {
+
+
+      if (this.submitButton) {
+
+        this.submitButton.disabled = true;
+
+        this.submitButton.textContent =
+          "Ответ уже отправлен 🤍";
+
+      }
+
+      if (this.message) {
+
+        this.message.textContent =
+          "Спасибо! Мы уже получили ваш ответ.";
+
+      }
+
+    } else {
+
+      localStorage.removeItem(
+        this.storageKey
+      );
+
+    }
+
+  }
+
+
+  async sendToTelegram() {
+
+
+    if (
+      localStorage.getItem(
+        this.storageKey
+      )
+    ) {
+
+      return;
+
+    }
+
+    const TELEGRAM_BOT_TOKEN =
+      "ТВОЙ_ТОКЕН";
+
+    const TELEGRAM_CHAT_ID =
+      "ТВОЙ_ID";
+
+
+    const formData =
+      new FormData(this.form);
+
+    const data =
+      Object.fromEntries(
+        formData.entries()
+      );
+
+    const attendance =
+      data.attendance === "yes"
+
+        ? "✅ С радостью приду"
+
+        : "❌ К сожалению, не смогу";
+
+
+    const message = `
+
+💍 Новая анкета гостя
+
+
+👤 Имя:
+${data.name}
+
+
+📞 Телефон:
+${data.phone}
+
+
+💒 Присутствие:
+${attendance}
+
+
+💌 Комментарий:
+${data.message || "Нет комментария"}
+
+
+
+────────────
+
+
+🤍 Александр & Лиана
+
+📅 05 сентября 2026
+
+⏰ ${new Date().toLocaleString("ru-RU")}
+
+`;
+
+    if (this.submitButton) {
+
+      this.submitButton.disabled = true;
+
+      this.submitButton.textContent =
+        "Отправляем...";
+
+    }
+
+    try {
+      const response =
+        await fetch(
+
+          `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+
+          {
+
+            method: "POST",
+
+
+            headers: {
+
+              "Content-Type":
+              "application/json"
+            },
+
+
+            body:
+            JSON.stringify({
+
+              chat_id:
+              TELEGRAM_CHAT_ID,
+
+
+              text:
+              message
+
+            })
+
+          }
+
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Telegram error"
+        );
+
+      }
+
+      localStorage.setItem(
+
+        this.storageKey,
+
+        Date.now()
+
+      );
+
+      if (this.message) {
+
+        this.message.textContent =
+          "Спасибо! Ваш ответ получен 🤍";
+
+      }
+
       this.form.reset();
-    }, 1200);
+
+      if (this.submitButton) {
+
+        this.submitButton.disabled = true;
+
+        this.submitButton.textContent =
+          "Ответ уже отправлен 🤍";
+
+      }
+
+    } catch(error) {
+
+
+      console.error(
+        error
+      );
+
+      if (this.message) {
+
+        this.message.textContent =
+          "Не удалось отправить анкету. Попробуйте ещё раз.";
+      }
+
+      if (this.submitButton) {
+
+        this.submitButton.disabled = false;
+
+        this.submitButton.textContent =
+          "Отправить анкету";
+
+      }
+
+    }
   }
 }
