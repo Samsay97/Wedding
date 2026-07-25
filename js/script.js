@@ -429,6 +429,64 @@ class CopyAddress {
     }
 }
 
+<<<<<<< HEAD
+=======
+/* ==========================================================
+WELCOME ATMOSPHERE
+========================================================== */
+
+const atmosphereCards = document.querySelectorAll(".atmosphere-card");
+
+const startJourneyButton = document.getElementById("startJourney");
+
+let selectedAtmosphere = null;
+
+atmosphereCards.forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        atmosphereCards.forEach(item =>
+            item.classList.remove("active")
+        );
+
+        card.classList.add("active");
+
+        selectedAtmosphere = card.dataset.atmosphere;
+
+        localStorage.setItem(
+            "weddingAtmosphere",
+            selectedAtmosphere
+        );
+
+        startJourneyButton.disabled = false;
+
+    });
+
+});
+
+const savedAtmosphere = localStorage.getItem("weddingAtmosphere");
+
+if(savedAtmosphere){
+
+    const activeCard = document.querySelector(
+
+        `.atmosphere-card[data-atmosphere="${savedAtmosphere}"]`
+
+    );
+
+    if(activeCard){
+
+        activeCard.classList.add("active");
+
+        selectedAtmosphere = savedAtmosphere;
+
+        startJourneyButton.disabled = false;
+
+    }
+
+}
+
+>>>>>>> parent of 999f541 (Update script.js)
 /* ==========================================================
    NAVIGATION
 ========================================================== */
@@ -470,11 +528,105 @@ class Navigation {
             return;
         }
 
+<<<<<<< HEAD
         if (current > this.lastScroll) {
             this.header.classList.add("hide");
         } else {
             this.header.classList.remove("hide");
         }
+=======
+    setTimeout(() => {
+        hero.classList.add("show");
+        hero.classList.add("hero-show");
+        hero.scrollIntoView({ behavior: "smooth" });
+    }, 700);
+});
+
+
+/* =======================================
+COPY ADDRESS
+======================================= */
+
+const copyButton=document.getElementById("copyAddress");
+
+if(copyButton){
+
+    copyButton.addEventListener("click",()=>{
+
+        navigator.clipboard.writeText(
+
+            "г. Карачаевск, ул. Пушкина, 127 (Гостевой дом Домики)"
+
+        );
+
+        copyButton.textContent="Адрес скопирован ✓";
+
+        setTimeout(()=>{
+
+            copyButton.textContent="Скопировать адрес";
+
+        },2000);
+
+    });
+
+}
+
+/* =======================================
+LIGHTBOX
+======================================= */
+
+const galleryImages=document.querySelectorAll(".gallery-item img");
+
+const lightbox=document.getElementById("lightbox");
+
+const lightboxImage=document.getElementById("lightboxImage");
+
+const lightboxClose=document.getElementById("lightboxClose");
+
+galleryImages.forEach(image=>{
+
+image.addEventListener("click",()=>{
+
+lightboxImage.src=image.src;
+
+lightbox.classList.add("active");
+
+document.body.style.overflow="hidden";
+
+});
+
+});
+
+function closeLightbox(){
+
+lightbox.classList.remove("active");
+
+document.body.style.overflow="";
+
+}
+
+lightboxClose.addEventListener("click",closeLightbox);
+
+lightbox.addEventListener("click",(e)=>{
+
+if(e.target===lightbox){
+
+closeLightbox();
+
+}
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="Escape"){
+
+closeLightbox();
+
+}
+
+});
+>>>>>>> parent of 999f541 (Update script.js)
 
         this.lastScroll = current;
     }
