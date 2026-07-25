@@ -303,55 +303,221 @@ class LocationActions {
 }
 
 class GalleryCarousel {
+
   constructor() {
+
     this.track = document.getElementById("galleryTrack");
     this.prev = document.querySelector(".gallery-prev");
     this.next = document.querySelector(".gallery-next");
-    if (!this.track || !this.prev || !this.next) return;
-    this.items = Array.from(this.track.querySelectorAll(".gallery-item"));
-    if (this.items.length < 2) return;
-    this.bind();
-    setTimeout(() => this.updateActiveState(), 80);
-  }
-  
-  }
-  getItemWidth() {
-    const item = this.track.querySelector(".gallery-item");
-    const style = window.getComputedStyle(this.track);
-    const gap = parseFloat(style.columnGap || style.gap || 18);
-    return item.getBoundingClientRect().width + gap;
-  }
-  bind() {
-    this.prev.addEventListener("click", () => this.track.scrollBy({ left: -this.getItemWidth(), behavior: "smooth" }));
-    this.next.addEventListener("click", () => this.track.scrollBy({ left: this.getItemWidth(), behavior: "smooth" }));
-    this.track.addEventListener("scroll", () => { this.handleLoop(); this.updateActiveState(); }, { passive: true });
-    window.addEventListener("resize", () => {
-      const itemWidth = this.getItemWidth();
-      if (this.track.scrollLeft < itemWidth * 0.5) this.track.scrollLeft = itemWidth;
-      this.updateActiveState();
-    });
-  }
-  updateActiveState() {
-    const trackRect = this.track.getBoundingClientRect();
-    const center = trackRect.left + trackRect.width / 2;
-    let closest = null;
-    let closestDistance = Infinity;
-    const items = Array.from(this.track.querySelectorAll(".gallery-item"));
-    items.forEach(item => {
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.left + rect.width / 2;
-      const distance = Math.abs(center - itemCenter);
-      item.classList.remove("is-active");
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closest = item;
-      }
-    });
-    if (closest) closest.classList.add("is-active");
-  }
-  
-}
 
+    if (!this.track || !this.prev || !this.next) return;
+
+
+    this.items = Array.from(
+      this.track.querySelectorAll(".gallery-item")
+    );
+
+
+    if (this.items.length < 2) return;
+
+
+    this.bind();
+
+
+    setTimeout(() => {
+      this.updateActiveState();
+    }, 80);
+
+  }
+
+
+  getItemWidth() {
+
+    const item = this.track.querySelector(".gallery-item");
+
+    const style = window.getComputedStyle(this.track);
+
+    const gap = parseFloat(
+      style.columnGap || style.gap || 18
+    );
+
+
+    return item.getBoundingClientRect().width + gap;
+
+  }
+
+
+
+  bind() {
+
+
+    this.prev.addEventListener("click", () => {
+
+      this.track.scrollBy({
+
+        left: -this.getItemWidth(),
+
+        behavior: "smooth"
+
+      });
+
+    });
+
+
+
+    this.next.addEventListener("click", () => {
+
+      this.track.scrollBy({
+
+        left: this.getItemWidth(),
+
+        behavior: "smooth"
+
+      });
+
+    });
+
+
+
+    this.track.addEventListener(
+      "scroll",
+      () => {
+
+        this.updateActiveState();
+
+      },
+      { passive:true }
+    );
+
+
+
+    this.track.addEventListener(
+      "touchend",
+      () => {
+
+        this.snapToCenter();
+
+      }
+    );
+
+
+
+    window.addEventListener(
+      "resize",
+      () => {
+
+        this.updateActiveState();
+
+      }
+    );
+
+
+  }
+
+
+
+  snapToCenter() {
+
+
+    const itemWidth = this.getItemWidth();
+
+
+    const index = Math.round(
+
+      this.track.scrollLeft / itemWidth
+
+    );
+
+
+    const maxIndex = this.items.length - 1;
+
+
+    const safeIndex = Math.max(
+      0,
+      Math.min(index, maxIndex)
+    );
+
+
+    this.track.scrollTo({
+
+      left: safeIndex * itemWidth,
+
+      behavior:"smooth"
+
+    });
+
+
+  }
+
+
+
+  updateActiveState() {
+
+
+    const trackRect = 
+      this.track.getBoundingClientRect();
+
+
+    const center =
+      trackRect.left + trackRect.width / 2;
+
+
+
+    let closest = null;
+
+    let closestDistance = Infinity;
+
+
+
+    this.items.forEach(item => {
+
+
+      const rect =
+        item.getBoundingClientRect();
+
+
+      const itemCenter =
+        rect.left + rect.width / 2;
+
+
+
+      const distance =
+        Math.abs(center - itemCenter);
+
+
+
+      item.classList.remove(
+        "is-active"
+      );
+
+
+
+      if (distance < closestDistance) {
+
+        closestDistance = distance;
+
+        closest = item;
+
+      }
+
+
+    });
+
+
+
+    if (closest) {
+
+      closest.classList.add(
+        "is-active"
+      );
+
+    }
+
+
+  }
+
+
+}
 class GalleryLightbox {
   constructor() {
     this.lightbox = document.getElementById("lightbox");
