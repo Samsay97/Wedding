@@ -534,7 +534,7 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 @media (max-width: 768px) {
 
     .hero-names {
-        transform: translateY(10px);
+        transform: translateY(13px);
     }
 
 }
