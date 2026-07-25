@@ -9,6 +9,7 @@
 
 <title>Наша свадьба</title>
 <link rel="stylesheet" href="css/style.css">
+<script src="js/script.js" defer></script>
 </head>
 
 <body>
@@ -46,7 +47,7 @@
 
             </ul>
 
-            <button id="burger" class="burger">
+            <button id="burger" class="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
 
                 <span></span>
 
@@ -140,6 +141,7 @@
 
         <button
             id="startJourney"
+            type="button"
             disabled>
 
             Начать путешествие
@@ -544,7 +546,8 @@
 
             <a
                 href="https://yandex.ru/maps/-/CTVwZ4KQ"
-                target="_blank">
+                target="_blank"
+                rel="noopener noreferrer">
 
                 г. Карачаевск,
                 ул. Пушкина, 127
@@ -566,6 +569,7 @@
 
             <button
                 id="copyAddress"
+                type="button"
                 class="copy-btn">
 
                 Скопировать адрес
@@ -840,25 +844,9 @@
 
 </footer>
 
-<!-- ====================================== -->
-<!-- MUSIC -->
-<!-- ====================================== -->
+<div id="lightbox" aria-hidden="true">
 
-<audio id="music" loop>
-
-    <source src="music/wedding.mp3" type="audio/mpeg">
-
-</audio>
-
-<button id="musicButton" class="music-button">
-
-    ♫
-
-</button>
-
-<div id="lightbox">
-
-    <span id="lightboxClose">&times;</span>
+    <span id="lightboxClose" role="button" tabindex="0" aria-label="Закрыть фотографию">&times;</span>
 
     <img id="lightboxImage" src="" alt="">
 

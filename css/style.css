@@ -3263,3 +3263,92 @@ font-size:36px;
 END
 ========================================================== */
 
+
+/* ==========================================================
+RECOVERY PATCH — WELCOME READABILITY & MOBILE
+========================================================== */
+
+#welcome{
+    min-height:100svh;
+    height:auto;
+    padding:120px 20px 70px;
+}
+
+.welcome-content{
+    width:min(860px,100%);
+    margin:auto;
+}
+
+#welcome .atmosphere-card{
+    background:rgba(255,255,255,.72);
+    border-color:rgba(107,36,50,.16);
+    box-shadow:0 12px 35px rgba(77,68,61,.08);
+}
+
+#welcome .atmosphere-card span{
+    color:var(--text);
+}
+
+#welcome .atmosphere-card:hover,
+#welcome .atmosphere-card.active{
+    background:rgba(255,255,255,.96);
+}
+
+.atmosphere-card:focus-visible,
+#startJourney:focus-visible,
+.copy-btn:focus-visible,
+.route-btn:focus-visible,
+#lightboxClose:focus-visible{
+    outline:3px solid rgba(107,36,50,.35);
+    outline-offset:4px;
+}
+
+@media(max-width:650px){
+    #welcome{
+        padding:100px 20px 50px;
+    }
+
+    #welcome h1{
+        font-size:clamp(38px,12vw,54px);
+    }
+
+    .welcome-subtitle{
+        margin-top:24px;
+        margin-bottom:20px;
+    }
+
+    .atmosphere-select{
+        width:min(100%,340px);
+        margin:0 auto 26px;
+        display:grid;
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .atmosphere-card{
+        width:100%;
+        height:auto;
+        min-height:82px;
+        padding:14px 18px;
+        flex-direction:row;
+        justify-content:flex-start;
+        gap:16px;
+        border-radius:18px;
+    }
+
+    .atmosphere-card img{
+        width:42px;
+        height:42px;
+        flex:0 0 auto;
+    }
+
+    .atmosphere-card span{
+        text-align:left;
+    }
+
+    #startJourney{
+        width:min(100%,340px);
+        margin-top:0;
+        padding:16px 22px;
+    }
+}
