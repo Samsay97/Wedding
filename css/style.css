@@ -212,12 +212,13 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 
 .palette-desktop { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto; }
 .color-dot { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 10px 26px rgba(48, 34, 24, .08); }
-.color-1 { background: #f0d7dd; }
-.color-2 { background: #efc4ce; }
-.color-3 { background: #d8c3b3; }
-.color-4 { background: #9ba483; }
-.color-5 { background: #9b7c68; }
-.color-6 { background: #7a2c3b; }
+
+.color-1 { background: #7B634B; }
+.color-2 { background: #98A27A; }
+.color-3 { background: #D7C5B6; }
+.color-4 { background: #F0C0C4; }
+.color-5 { background: #EBCAD7; }
+
 .palette-mobile-card { display: none; max-width: 360px; margin: 0 auto; position: relative; }
 .palette-mobile-card img { width: 100%; border-radius: 30px; }
 .mobile-palette-overlay { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 16px; }
