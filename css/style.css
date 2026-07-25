@@ -171,10 +171,10 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .audio-toggle[hidden] { display: none; }
 .audio-toggle.is-compact {
 
- background: rgba(92,70,55,.22);
+ background: rgba(92,70,55,.24);
 
  box-shadow:
- 0 12px 30px rgba(30,18,12,.32);
+ 0 12px 30px rgba(30,18,12,.29);
 
 }
 /* ==========================================================
