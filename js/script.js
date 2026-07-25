@@ -430,7 +430,65 @@ class CopyAddress {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+/* ==========================================================
+WELCOME ATMOSPHERE
+========================================================== */
+
+const atmosphereCards = document.querySelectorAll(".atmosphere-card");
+
+const startJourneyButton = document.getElementById("startJourney");
+
+let selectedAtmosphere = null;
+
+atmosphereCards.forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        atmosphereCards.forEach(item =>
+            item.classList.remove("active")
+        );
+
+        card.classList.add("active");
+
+        selectedAtmosphere = card.dataset.atmosphere;
+
+        localStorage.setItem(
+            "weddingAtmosphere",
+            selectedAtmosphere
+        );
+
+        startJourneyButton.disabled = false;
+
+    });
+
+});
+
+const savedAtmosphere = localStorage.getItem("weddingAtmosphere");
+
+if(savedAtmosphere){
+
+    const activeCard = document.querySelector(
+
+        `.atmosphere-card[data-atmosphere="${savedAtmosphere}"]`
+
+    );
+
+    if(activeCard){
+
+        activeCard.classList.add("active");
+
+        selectedAtmosphere = savedAtmosphere;
+
+        startJourneyButton.disabled = false;
+
+    }
+
+}
+
+>>>>>>> parent of 999f541 (Update script.js)
 /* ==========================================================
 WELCOME ATMOSPHERE
 ========================================================== */
