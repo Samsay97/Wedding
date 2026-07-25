@@ -352,3 +352,44 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
   .decor-left { left: -10px; }
   .decor-right { right: -8px; }
 }
+
+/* ==========================================================
+   MOBILE WELCOME FIX
+   кнопка открытия должна быть видна сразу
+========================================================== */
+
+@media (max-width:520px){
+
+    .welcome-card{
+        max-height:96vh;
+        padding:22px 16px;
+    }
+
+    .welcome-card h1{
+        font-size:2.2rem;
+        margin-bottom:10px;
+    }
+
+    .welcome-lead{
+        margin-bottom:12px;
+    }
+
+    .atmosphere-grid{
+        gap:10px;
+    }
+
+    .atmosphere-card{
+        padding:14px 10px;
+        gap:6px;
+    }
+
+    .atmosphere-card img{
+        width:32px;
+        height:32px;
+    }
+
+    .welcome-card .primary-btn{
+        margin-top:14px;
+    }
+
+}
