@@ -642,7 +642,7 @@ class Navigation{
 COPY ADDRESS
 ========================================================== */
 
-const copyButton=document.getElementById("copy-address");
+
 
 if(copyButton){
 
@@ -732,78 +732,51 @@ if(savedAtmosphere){
 
 }
 
-/* =======================================
+/* ==========================================================
 WELCOME
-======================================= */
+========================================================== */
 
-const welcome=document.getElementById("welcome");
+const welcome = document.getElementById("welcome");
+const hero = document.getElementById("hero");
+const startJourney = document.getElementById("startJourney");
+const atmosphereCards = document.querySelectorAll(".atmosphere-card");
 
-const hero=document.getElementById("hero");
+let selectedAtmosphere = localStorage.getItem("weddingAtmosphere") || null;
 
-const startJourney=document.getElementById("startJourney");
-
-const atmosphereCards=document.querySelectorAll(".atmosphere-card");
-
-let selectedAtmosphere=null;
-
-atmosphereCards.forEach(card=>{
-
-card.addEventListener("click",()=>{
-
-atmosphereCards.forEach(c=>c.classList.remove("active"));
-
-card.classList.add("active");
-
-selectedAtmosphere=card.dataset.atmosphere;
-
-localStorage.setItem("weddingAtmosphere",selectedAtmosphere);
-
-startJourney.disabled=false;
-
-});
-
-});
-
-const saved=localStorage.getItem("weddingAtmosphere");
-
-if(saved){
-
-const active=document.querySelector(`.atmosphere-card[data-atmosphere="${saved}"]`);
-
-if(active){
-
-active.classList.add("active");
-
-selectedAtmosphere=saved;
-
-startJourney.disabled=false;
-
+function syncStartButton() {
+    startJourney.disabled = !selectedAtmosphere;
 }
 
-}
-
-startJourney.addEventListener("click",()=>{
-
-welcome.classList.add("hide");
-
-startSelectedAtmosphere();
-
-setTimeout(()=>{
-
-hero.classList.add("show");
-
-hero.classList.add("show");
-
-hero.classList.add("hero-show");
-
-hero.scrollIntoView({
-
-behavior:"smooth"
-
+atmosphereCards.forEach(card => {
+    card.addEventListener("click", () => {
+        atmosphereCards.forEach(item => item.classList.remove("active"));
+        card.classList.add("active");
+        selectedAtmosphere = card.dataset.atmosphere;
+        localStorage.setItem("weddingAtmosphere", selectedAtmosphere);
+        syncStartButton();
+    });
 });
 
-},700);
+if (selectedAtmosphere) {
+    const activeCard = document.querySelector(
+        `.atmosphere-card[data-atmosphere="${selectedAtmosphere}"]`
+    );
+    if (activeCard) activeCard.classList.add("active");
+}
 
+syncStartButton();
+
+startJourney.addEventListener("click", () => {
+    if (!selectedAtmosphere) return;
+
+    welcome.classList.add("hide");
+    startSelectedAtmosphere();
+
+    setTimeout(() => {
+        hero.classList.add("show");
+        hero.classList.add("hero-show");
+        hero.scrollIntoView({ behavior: "smooth" });
+    }, 700);
 });
 
 
