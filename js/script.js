@@ -313,7 +313,8 @@ class GalleryCarousel {
     this.bind();
     setTimeout(() => this.updateActiveState(), 80);
   }
-    }
+  
+  }
   getItemWidth() {
     const item = this.track.querySelector(".gallery-item");
     const style = window.getComputedStyle(this.track);
@@ -348,7 +349,21 @@ class GalleryCarousel {
     });
     if (closest) closest.classList.add("is-active");
   }
+  handleLoop() {
+    if (this.isAdjusting) return;
+    const itemWidth = this.getItemWidth();
+    const maxScroll = this.track.scrollWidth - this.track.clientWidth;
+    if (this.track.scrollLeft <= itemWidth * 0.3) {
+      this.isAdjusting = true;
+      this.track.scrollLeft = maxScroll - itemWidth * 1.7;
+      requestAnimationFrame(() => { this.isAdjusting = false; this.updateActiveState(); });
+    } else if (this.track.scrollLeft >= maxScroll - itemWidth * 0.3) {
+      this.isAdjusting = true;
+      this.track.scrollLeft = itemWidth;
+      requestAnimationFrame(() => { this.isAdjusting = false; this.updateActiveState(); });
+    }
   }
+}
 
 class GalleryLightbox {
   constructor() {
