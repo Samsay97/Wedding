@@ -140,36 +140,6 @@ const WeddingApp = {
 
     },
 
-/* =======================================
-REVEAL
-======================================= */
-
-const reveals=document.querySelectorAll(".reveal");
-
-const revealObserver=new IntersectionObserver(entries=>{
-
-entries.forEach(entry=>{
-
-if(entry.isIntersecting){
-
-entry.target.classList.add("active");
-
-}
-
-});
-
-},{
-
-threshold:.18
-
-});
-
-reveals.forEach(section=>{
-
-revealObserver.observe(section);
-
-});
-
 
     /* ==========================================================
        LEAF
@@ -336,7 +306,7 @@ class Countdown{
 
         this.target=new Date(
 
-            "2026-09-12T15:00:00"
+            "2026-09-05T15:00:00"
 
         ).getTime();
 
