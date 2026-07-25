@@ -326,12 +326,12 @@ class GalleryCarousel {
 
     setTimeout(() => {
       this.updateActiveState();
-    }, 80);
+    },80);
 
   }
 
 
-  getItemWidth() {
+  getItemWidth(){
 
     const item = this.track.querySelector(".gallery-item");
 
@@ -347,114 +347,50 @@ class GalleryCarousel {
   }
 
 
+  bind(){
 
-  bind() {
-
-
-    this.prev.addEventListener("click", () => {
+    this.prev.addEventListener("click",()=>{
 
       this.track.scrollBy({
-
-        left: -this.getItemWidth(),
-
-        behavior: "smooth"
-
+        left:-this.getItemWidth(),
+        behavior:"smooth"
       });
 
     });
 
 
-
-    this.next.addEventListener("click", () => {
+    this.next.addEventListener("click",()=>{
 
       this.track.scrollBy({
-
-        left: this.getItemWidth(),
-
-        behavior: "smooth"
-
+        left:this.getItemWidth(),
+        behavior:"smooth"
       });
 
     });
-
 
 
     this.track.addEventListener(
       "scroll",
-      () => {
-
+      ()=>{
         this.updateActiveState();
-
       },
-      { passive:true }
+      {passive:true}
     );
-
-
-
-    this.track.addEventListener(
-      "touchend",
-      () => {
-
-        this.snapToCenter();
-
-      }
-    );
-
 
 
     window.addEventListener(
       "resize",
-      () => {
-
+      ()=>{
         this.updateActiveState();
-
       }
     );
 
-
   }
 
 
+  updateActiveState(){
 
-  snapToCenter() {
-
-
-    const itemWidth = this.getItemWidth();
-
-
-    const index = Math.round(
-
-      this.track.scrollLeft / itemWidth
-
-    );
-
-
-    const maxIndex = this.items.length - 1;
-
-
-    const safeIndex = Math.max(
-      0,
-      Math.min(index, maxIndex)
-    );
-
-
-    this.track.scrollTo({
-
-      left: safeIndex * itemWidth,
-
-      behavior:"smooth"
-
-    });
-
-
-  }
-
-
-
-  updateActiveState() {
-
-
-    const trackRect = 
+    const trackRect =
       this.track.getBoundingClientRect();
 
 
@@ -462,15 +398,12 @@ class GalleryCarousel {
       trackRect.left + trackRect.width / 2;
 
 
-
     let closest = null;
 
     let closestDistance = Infinity;
 
 
-
-    this.items.forEach(item => {
-
+    this.items.forEach(item=>{
 
       const rect =
         item.getBoundingClientRect();
@@ -480,42 +413,30 @@ class GalleryCarousel {
         rect.left + rect.width / 2;
 
 
-
       const distance =
-        Math.abs(center - itemCenter);
+        Math.abs(center-itemCenter);
 
 
-
-      item.classList.remove(
-        "is-active"
-      );
+      item.classList.remove("is-active");
 
 
-
-      if (distance < closestDistance) {
+      if(distance < closestDistance){
 
         closestDistance = distance;
-
         closest = item;
 
       }
 
-
     });
 
 
+    if(closest){
 
-    if (closest) {
-
-      closest.classList.add(
-        "is-active"
-      );
+      closest.classList.add("is-active");
 
     }
 
-
   }
-
 
 }
 class GalleryLightbox {
