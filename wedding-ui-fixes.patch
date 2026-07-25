@@ -1,0 +1,400 @@
+diff --git a/index.html b/index.html
+--- a/index.html
++++ b/index.html
+@@
+-  <link rel="stylesheet" href="css/style.css?v=6">
+-  <script src="js/script.js" defer></script>
++  <link rel="stylesheet" href="css/style.css?v=7">
++  <script src="js/script.js?v=3" defer></script>
+
+diff --git a/css/style.css b/css/style.css
+--- a/css/style.css
++++ b/css/style.css
+@@
+-.color-3 { background: #d8c3b3; }
++.color-3 { background: #bda38d; }
+@@
+-.color-5 { background: #9b7c68; }
+-.color-6 { background: #7a2c3b; }
++.color-5 { background: #78805c; }
++.color-6 { background: #5f472f; }
+
+@@
+ @media (max-width: 520px) {
+   .navbar { grid-template-columns: 46px minmax(0, 1fr) 44px; gap: 7px; }
+@@
+ }
++
++/* ==========================================================
++   AUDIO TOGGLE
++   стеклянная кнопка: овал -> круг при прокрутке
++========================================================== */
++
++.audio-toggle {
++  width: 164px;
++  min-width: 52px;
++  justify-content: flex-start;
++  overflow: hidden;
++  white-space: nowrap;
++  transition:
++    width .44s cubic-bezier(.22, 1, .36, 1),
++    padding .44s cubic-bezier(.22, 1, .36, 1),
++    gap .34s ease,
++    transform var(--transition),
++    opacity var(--transition),
++    background var(--transition);
++}
++
++.audio-toggle-icon {
++  flex: 0 0 28px;
++}
++
++#audioToggleLabel {
++  display: block;
++  max-width: 104px;
++  overflow: hidden;
++  opacity: 1;
++  transform: translateX(0);
++  transition:
++    max-width .38s ease,
++    opacity .22s ease,
++    transform .38s ease;
++}
++
++.audio-toggle.is-compact {
++  width: 52px;
++  padding-inline: 11px;
++  gap: 0;
++}
++
++.audio-toggle.is-compact #audioToggleLabel {
++  max-width: 0;
++  opacity: 0;
++  transform: translateX(8px);
++}
++
++/* ==========================================================
++   GALLERY
++   конечная галерея: один свайп = ровно одно фото
++========================================================== */
++
++.gallery-track {
++  overflow-x: hidden;
++  padding-inline: 14%;
++  scroll-snap-type: none;
++  touch-action: pan-y;
++  overscroll-behavior-x: contain;
++  cursor: grab;
++}
++
++.gallery-track.is-dragging {
++  cursor: grabbing;
++}
++
++.gallery-item {
++  scroll-snap-align: none;
++  user-select: none;
++  -webkit-user-drag: none;
++}
++
++.gallery-item img {
++  pointer-events: none;
++}
++
++.gallery-nav:disabled {
++  opacity: .3;
++  cursor: default;
++  transform: none;
++}
++
++@media (max-width: 680px) {
++  .gallery-track {
++    padding-inline: 6%;
++  }
++
++  .hero-layout .hero-names {
++    margin-top: 8px;
++  }
++}
+
+diff --git a/js/script.js b/js/script.js
+--- a/js/script.js
++++ b/js/script.js
+@@
+     this.audioToggleLabel = document.getElementById("audioToggleLabel");
+     this.selected = localStorage.getItem("weddingAtmosphere") || "";
+     this.floatingLeaf = document.getElementById("leafMascotFloating");
++    this.audioCompactTimer = null;
+     if (!this.section || !this.cards.length || !this.startButton) return;
+@@
+-    this.audioToggle?.addEventListener("click", () => this.toggleAudio());
++    this.audioToggle?.addEventListener("click", () => {
++      this.expandAudioToggle();
++      this.toggleAudio();
++    });
+     this.audio?.addEventListener("play", () => this.updateAudioUi());
+     this.audio?.addEventListener("pause", () => this.updateAudioUi());
++    window.addEventListener("scroll", () => this.compactAudioToggleOnScroll(), { passive: true });
+@@
+     this.audio.volume = 0.15;
+     this.audio.play().catch(() => {});
+     this.audioToggle.hidden = false;
++    this.expandAudioToggle();
+     this.updateAudioUi();
+   }
+
+   toggleAudio() {
+     if (!this.audio || this.selected === "silent") return;
+-    if (this.audio.paused) this.audio.play().catch(() => {});
+-    else this.audio.pause();
++    clearTimeout(this.audioCompactTimer);
++    this.expandAudioToggle();
++
++    if (this.audio.paused) {
++      this.audio.play()
++        .then(() => {
++          this.updateAudioUi();
++          this.audioCompactTimer = setTimeout(() => {
++            this.compactAudioToggle();
++          }, 1800);
++        })
++        .catch(() => {});
++    } else {
++      this.audio.pause();
++      this.updateAudioUi();
++    }
++  }
++
++  compactAudioToggleOnScroll() {
++    if (!this.audioToggle || !this.audio) return;
++    if (this.selected === "silent" || this.audio.paused || window.scrollY < 12) return;
++    this.compactAudioToggle();
++  }
++
++  compactAudioToggle() {
++    if (!this.audioToggle) return;
++    clearTimeout(this.audioCompactTimer);
++    this.audioToggle.classList.add("is-compact");
++    this.audioToggle.setAttribute("aria-expanded", "false");
++  }
++
++  expandAudioToggle() {
++    if (!this.audioToggle) return;
++    this.audioToggle.classList.remove("is-compact");
++    this.audioToggle.setAttribute("aria-expanded", "true");
+   }
+
+   updateAudioUi() {
+     if (!this.audioToggle || !this.audioToggleLabel || !this.audio) return;
+     const isPaused = this.audio.paused;
+     this.audioToggle.classList.toggle("is-paused", isPaused);
+     this.audioToggleLabel.textContent = isPaused ? "Продолжить" : "Атмосфера";
++    this.audioToggle.setAttribute(
++      "aria-label",
++      isPaused ? "Продолжить музыку" : "Поставить музыку на паузу"
++    );
++    if (isPaused) this.expandAudioToggle();
+   }
+ }
+
+@@
+ class GalleryCarousel {
+   constructor() {
+     this.track = document.getElementById("galleryTrack");
+     this.prev = document.querySelector(".gallery-prev");
+     this.next = document.querySelector(".gallery-next");
+     if (!this.track || !this.prev || !this.next) return;
++
+     this.items = Array.from(this.track.querySelectorAll(".gallery-item"));
+-    if (this.items.length < 2) return;
+-    this.isAdjusting = false;
+-    this.setupInfinite();
++    if (!this.items.length) return;
++
++    this.currentIndex = 0;
++    this.isAnimating = false;
++    this.pointerId = null;
++    this.pointerStartX = 0;
++    this.pointerStartY = 0;
++    this.pointerDeltaX = 0;
++    this.isHorizontalSwipe = false;
++    this.suppressClick = false;
++
+     this.bind();
+-    setTimeout(() => this.updateActiveState(), 80);
+-  }
+-  setupInfinite() {
+-    const firstClone = this.items[0].cloneNode(true);
+-    const lastClone = this.items[this.items.length - 1].cloneNode(true);
+-    firstClone.dataset.clone = "first";
+-    lastClone.dataset.clone = "last";
+-    this.track.appendChild(firstClone);
+-    this.track.insertBefore(lastClone, this.track.firstChild);
+-    requestAnimationFrame(() => {
+-      this.track.scrollLeft = this.getItemWidth();
+-    });
+-  }
+-  getItemWidth() {
+-    const item = this.track.querySelector(".gallery-item");
+-    const style = window.getComputedStyle(this.track);
+-    const gap = parseFloat(style.columnGap || style.gap || 18);
+-    return item.getBoundingClientRect().width + gap;
++    requestAnimationFrame(() => this.goTo(0, false));
+   }
++
+   bind() {
+-    this.prev.addEventListener("click", () => this.track.scrollBy({ left: -this.getItemWidth(), behavior: "smooth" }));
+-    this.next.addEventListener("click", () => this.track.scrollBy({ left: this.getItemWidth(), behavior: "smooth" }));
+-    this.track.addEventListener("scroll", () => { this.handleLoop(); this.updateActiveState(); }, { passive: true });
+-    window.addEventListener("resize", () => {
+-      const itemWidth = this.getItemWidth();
+-      if (this.track.scrollLeft < itemWidth * 0.5) this.track.scrollLeft = itemWidth;
+-      this.updateActiveState();
+-    });
++    this.prev.addEventListener("click", () => this.goTo(this.currentIndex - 1));
++    this.next.addEventListener("click", () => this.goTo(this.currentIndex + 1));
++
++    this.track.addEventListener("pointerdown", event => this.onPointerDown(event));
++    this.track.addEventListener("pointermove", event => this.onPointerMove(event), { passive: false });
++    this.track.addEventListener("pointerup", event => this.onPointerUp(event));
++    this.track.addEventListener("pointercancel", event => this.onPointerUp(event));
++
++    this.track.addEventListener("click", event => {
++      if (!this.suppressClick) return;
++      event.preventDefault();
++      event.stopPropagation();
++      this.suppressClick = false;
++    }, true);
++
++    window.addEventListener("resize", () => this.goTo(this.currentIndex, false));
+   }
++
++  onPointerDown(event) {
++    if (this.isAnimating) return;
++    if (event.pointerType === "mouse" && event.button !== 0) return;
++
++    this.pointerId = event.pointerId;
++    this.pointerStartX = event.clientX;
++    this.pointerStartY = event.clientY;
++    this.pointerDeltaX = 0;
++    this.isHorizontalSwipe = false;
++  }
++
++  onPointerMove(event) {
++    if (event.pointerId !== this.pointerId) return;
++
++    const dx = event.clientX - this.pointerStartX;
++    const dy = event.clientY - this.pointerStartY;
++
++    if (!this.isHorizontalSwipe && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
++      this.isHorizontalSwipe = true;
++      this.track.classList.add("is-dragging");
++      this.track.setPointerCapture?.(event.pointerId);
++    }
++
++    if (!this.isHorizontalSwipe) return;
++
++    this.pointerDeltaX = dx;
++    event.preventDefault();
++  }
++
++  onPointerUp(event) {
++    if (event.pointerId !== this.pointerId) return;
++
++    this.track.classList.remove("is-dragging");
++
++    if (this.track.hasPointerCapture?.(event.pointerId)) {
++      this.track.releasePointerCapture(event.pointerId);
++    }
++
++    const deltaX = this.pointerDeltaX;
++    const shouldMove = this.isHorizontalSwipe && Math.abs(deltaX) >= 36;
++
++    this.pointerId = null;
++    this.pointerStartX = 0;
++    this.pointerStartY = 0;
++    this.pointerDeltaX = 0;
++    this.isHorizontalSwipe = false;
++
++    if (!shouldMove) return;
++
++    this.suppressClick = true;
++    this.goTo(this.currentIndex + (deltaX < 0 ? 1 : -1));
++
++    setTimeout(() => {
++      this.suppressClick = false;
++    }, 450);
++  }
++
++  goTo(index, smooth = true) {
++    if (this.isAnimating && smooth) return;
++
++    const lastIndex = this.items.length - 1;
++    const nextIndex = Math.max(0, Math.min(index, lastIndex));
++    const item = this.items[nextIndex];
++
++    this.currentIndex = nextIndex;
++
++    const left = item.offsetLeft - (this.track.clientWidth - item.offsetWidth) / 2;
++
++    if (smooth) this.isAnimating = true;
++
++    this.track.scrollTo({
++      left,
++      behavior: smooth ? "smooth" : "auto"
++    });
++
++    this.updateActiveState();
++    this.updateControls();
++
++    if (!smooth) {
++      this.isAnimating = false;
++      return;
++    }
++
++    clearTimeout(this.animationTimer);
++    this.animationTimer = setTimeout(() => {
++      this.isAnimating = false;
++      this.goTo(this.currentIndex, false);
++    }, 480);
++  }
++
+   updateActiveState() {
+-    const trackRect = this.track.getBoundingClientRect();
+-    const center = trackRect.left + trackRect.width / 2;
+-    let closest = null;
+-    let closestDistance = Infinity;
+-    const items = Array.from(this.track.querySelectorAll(".gallery-item"));
+-    items.forEach(item => {
+-      const rect = item.getBoundingClientRect();
+-      const itemCenter = rect.left + rect.width / 2;
+-      const distance = Math.abs(center - itemCenter);
+-      item.classList.remove("is-active");
+-      if (distance < closestDistance) {
+-        closestDistance = distance;
+-        closest = item;
+-      }
++    this.items.forEach((item, index) => {
++      item.classList.toggle("is-active", index === this.currentIndex);
+     });
+-    if (closest) closest.classList.add("is-active");
+   }
+-  handleLoop() {
+-    if (this.isAdjusting) return;
+-    const itemWidth = this.getItemWidth();
+-    const maxScroll = this.track.scrollWidth - this.track.clientWidth;
+-    if (this.track.scrollLeft <= itemWidth * 0.3) {
+-      this.isAdjusting = true;
+-      this.track.scrollLeft = maxScroll - itemWidth * 1.7;
+-      requestAnimationFrame(() => { this.isAdjusting = false; this.updateActiveState(); });
+-    } else if (this.track.scrollLeft >= maxScroll - itemWidth * 0.3) {
+-      this.isAdjusting = true;
+-      this.track.scrollLeft = itemWidth;
+-      requestAnimationFrame(() => { this.isAdjusting = false; this.updateActiveState(); });
+-    }
++
++  updateControls() {
++    this.prev.disabled = this.currentIndex === 0;
++    this.next.disabled = this.currentIndex === this.items.length - 1;
+   }
+ }
