@@ -313,6 +313,26 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .wave-dot:nth-child(5) { animation-delay: 1.2s; }
 .wave-dot { animation: dotWave 3.2s ease-in-out infinite; }
 
+/* По умолчанию показываем только ПК палитру */
+.palette-mobile-card {
+    display: none;
+}
+
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+
+    .palette-desktop {
+        display: none;
+    }
+
+
+    .palette-mobile-card {
+        display: block;
+    }
+
+}
+
 .rsvp-card { max-width: 860px; margin: 0 auto; padding: clamp(22px, 4vw, 38px); background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.72); backdrop-filter: blur(18px); border-radius: 34px; box-shadow: var(--shadow); }
 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 18px; }
 .field { display: grid; gap: 10px; }
