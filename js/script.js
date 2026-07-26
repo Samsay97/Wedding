@@ -713,7 +713,7 @@ class RSVPForm {
       "8837294046:AAHYmb72BCE2ZhwDmhNxQDgFCVWEX50N3oI";
 
     const TELEGRAM_CHAT_ID =
-      "8837294046";
+      "1320744340";
 
 
     const formData =
