@@ -538,3 +538,71 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
     }
 
 }
+
+/* Палитра на ПК: 5 кружков по центру и живая волна */
+.palette-desktop {
+  width: fit-content;
+  max-width: 100%;
+  margin: 42px auto 0;
+  padding: 22px 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 24px);
+}
+
+.palette-desktop .color-dot {
+  margin: 0;
+  flex: 0 0 auto;
+
+  animation: desktopPaletteWave 2.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.palette-desktop .color-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.palette-desktop .color-dot:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.palette-desktop .color-dot:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+.palette-desktop .color-dot:nth-child(4) {
+  animation-delay: 0.48s;
+}
+
+.palette-desktop .color-dot:nth-child(5) {
+  animation-delay: 0.64s;
+}
+
+@keyframes desktopPaletteWave {
+  0%,
+  55%,
+  100% {
+    transform: translateY(0);
+  }
+
+  18% {
+    transform: translateY(-15px);
+  }
+
+  32% {
+    transform: translateY(3px);
+  }
+
+  42% {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .palette-desktop .color-dot {
+    animation: none;
+    transform: none;
+  }
+}
