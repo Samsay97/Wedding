@@ -710,7 +710,7 @@ class RSVPForm {
     }
 
     const TELEGRAM_BOT_TOKEN =
-      "8837294046:AAHYmb72BCE2ZhwDmhNxQDgFCVWEX50N3oI";
+      "8837294046:AAGnKHwMNgYF_mL7_cxadXgSKaG21UdgMjA";
 
     const TELEGRAM_CHAT_ID =
       "1320744340";
