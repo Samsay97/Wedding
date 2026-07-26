@@ -612,10 +612,10 @@ class RSVPForm {
     }
 
     const TELEGRAM_BOT_TOKEN =
-      "ТВОЙ_ТОКЕН";
+      "8837294046:AAHYmb72BCE2ZhwDmhNxQDgFCVWEX50N3oI";
 
     const TELEGRAM_CHAT_ID =
-      "ТВОЙ_ID";
+      "8837294046";
 
 
     const formData =
