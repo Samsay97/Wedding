@@ -293,9 +293,6 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .detail-card img { width: 40px; height: 40px; margin: 0 auto 16px; }
 .detail-card h3 { font-size: clamp(1.55rem, 2.8vw, 1.95rem); margin-bottom: 10px; }
 
-/* =====================================================
-   ДРЕСС-КОД — ЦВЕТОВАЯ ПАЛИТРА
-===================================================== */
 /* ==========================================================
    ДРЕСС-КОД — ЦВЕТОВАЯ ПАЛИТРА
 ========================================================== */
@@ -547,7 +544,10 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
     animation: none;
     transform: none;
   }
-}.rsvp-card { max-width: 860px; margin: 0 auto; padding: clamp(22px, 4vw, 38px); background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.72); backdrop-filter: blur(18px); border-radius: 34px; box-shadow: var(--shadow); }
+}
+
+
+.rsvp-card { max-width: 860px; margin: 0 auto; padding: clamp(22px, 4vw, 38px); background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.72); backdrop-filter: blur(18px); border-radius: 34px; box-shadow: var(--shadow); }
 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 18px; }
 .field { display: grid; gap: 10px; }
 .field span, .attendance-box legend { color: var(--text); font-size: .95rem; font-weight: 500; }
