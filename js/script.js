@@ -18,6 +18,7 @@ class WeddingApp {
     new LocationActions();
     new GalleryCarousel();
     new GalleryLightbox();
+    new PhoneMask();
     new RSVPForm();
     new MobileMenu();
   }
@@ -498,6 +499,103 @@ class GalleryLightbox {
     document.body.style.overflow = "";
   }
 }
+
+class PhoneMask {
+  constructor() {
+    this.input = document.getElementById("guestPhone");
+
+    if (!this.input) return;
+
+    this.bind();
+  }
+
+  bind() {
+    this.input.addEventListener("focus", () => {
+      if (!this.input.value) {
+        this.input.value = "+7 ";
+      }
+    });
+
+    this.input.addEventListener("input", () => {
+      this.format();
+    });
+
+    this.input.addEventListener("keydown", event => {
+      const value = this.input.value;
+
+      if (
+        event.key === "Backspace" &&
+        (value === "+7 " || value === "+7")
+      ) {
+        event.preventDefault();
+      }
+    });
+
+    this.input.addEventListener("blur", () => {
+      if (this.input.value === "+7 " || this.input.value === "+7") {
+        this.input.value = "";
+      }
+    });
+
+    this.input.addEventListener("paste", event => {
+      event.preventDefault();
+
+      const pastedText = event.clipboardData.getData("text");
+      this.input.value = pastedText;
+      this.format();
+    });
+  }
+
+  format() {
+    let digits = this.input.value.replace(/\D/g, "");
+
+    /*
+     * Если пользователь вставил номер:
+     * 8 928 123-45-67
+     * или
+     * 7 928 123-45-67
+     * первая цифра страны удаляется.
+     */
+    if (digits.startsWith("7") || digits.startsWith("8")) {
+      digits = digits.slice(1);
+    }
+
+    digits = digits.slice(0, 10);
+
+    let formatted = "+7";
+
+    if (digits.length > 0) {
+      formatted += ` (${digits.slice(0, 3)}`;
+    }
+
+    if (digits.length >= 3) {
+      formatted += ")";
+    }
+
+    if (digits.length > 3) {
+      formatted += ` ${digits.slice(3, 6)}`;
+    }
+
+    if (digits.length > 6) {
+      formatted += `-${digits.slice(6, 8)}`;
+    }
+
+    if (digits.length > 8) {
+      formatted += `-${digits.slice(8, 10)}`;
+    }
+
+    this.input.value = formatted;
+
+    const isComplete = digits.length === 10;
+
+    this.input.setCustomValidity(
+      isComplete
+        ? ""
+        : "Введите номер телефона полностью"
+    );
+  }
+}
+
 
 class RSVPForm {
 
