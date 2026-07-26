@@ -296,247 +296,148 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 /* =====================================================
    ДРЕСС-КОД — ЦВЕТОВАЯ ПАЛИТРА
 ===================================================== */
+/* ==========================================================
+   DRESS CODE PALETTE — FINAL
+========================================================== */
 
+/* Цвета */
+.color-1 { background: #7a2c3b; } /* тёмный бордовый */
+.color-2 { background: #b79c85; } /* тёплый бежево-коричневый */
+.color-3 { background: #9ea782; } /* оливковый */
+.color-4 { background: #e6c8d2; } /* нежно-розовый */
+.color-5 { background: #efe3e8; } /* самый светлый */
 
-/* Общий вид всех цветных кружков */
-
+/* Общий стиль кружков */
 .color-dot {
   display: block;
-  width: clamp(72px, 8vw, 104px);
-  height: clamp(72px, 8vw, 104px);
-  flex: 0 0 auto;
-
   border-radius: 50%;
-  border: 4px solid rgba(255, 255, 255, 0.92);
-
+  border: 4px solid rgba(255,255,255,.95);
   box-shadow:
-    0 12px 28px rgba(74, 52, 43, 0.13),
-    inset 0 0 0 1px rgba(122, 44, 59, 0.05);
+    0 10px 24px rgba(82, 61, 51, .14),
+    inset 0 0 0 1px rgba(122,44,59,.06);
+  flex: 0 0 auto;
 }
 
-
-/* Цвета: color-1 самый тёмный, color-5 самый светлый */
-
-.color-1 {
-  background: #7a2c3b;
-}
-
-.color-2 {
-  background: #b0937d;
-}
-
-.color-3 {
-  background: #9ba483;
-}
-
-.color-4 {
-  background: #e9cad2;
-}
-
-.color-5 {
-  background: #f4e6ea;
-}
-
-
-/* =====================================================
-   ДЕСКТОПНАЯ ВЕРСИЯ
-===================================================== */
+/* =========================
+   DESKTOP
+========================= */
 
 .palette-desktop {
-  width: fit-content;
-  max-width: 100%;
-
-  margin: 42px auto 0;
-  padding: 24px 12px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  gap: clamp(12px, 2vw, 24px);
+  gap: 16px;
+  margin: 38px auto 0;
+  width: fit-content;
+  max-width: 100%;
 }
-
-
-/* Бегущая волна */
 
 .palette-desktop .color-dot {
-  margin: 0;
-
-  animation:
-    paletteWaveDesktop 2.6s ease-in-out infinite;
-
-  will-change: transform;
+  width: 72px;
+  height: 72px;
+  animation: desktopPaletteWave 2.6s ease-in-out infinite;
 }
 
-.palette-desktop .color-dot:nth-child(1) {
-  animation-delay: 0s;
+.palette-desktop .color-dot:nth-child(1) { animation-delay: 0s; }
+.palette-desktop .color-dot:nth-child(2) { animation-delay: 0.18s; }
+.palette-desktop .color-dot:nth-child(3) { animation-delay: 0.36s; }
+.palette-desktop .color-dot:nth-child(4) { animation-delay: 0.54s; }
+.palette-desktop .color-dot:nth-child(5) { animation-delay: 0.72s; }
+
+@keyframes desktopPaletteWave {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
 }
 
-.palette-desktop .color-dot:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.palette-desktop .color-dot:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.palette-desktop .color-dot:nth-child(4) {
-  animation-delay: 0.45s;
-}
-
-.palette-desktop .color-dot:nth-child(5) {
-  animation-delay: 0.6s;
-}
-
-@keyframes paletteWaveDesktop {
-  0%,
-  55%,
-  100% {
-    transform: translateY(0);
-  }
-
-  18% {
-    transform: translateY(-14px);
-  }
-
-  32% {
-    transform: translateY(3px);
-  }
-
-  42% {
-    transform: translateY(0);
-  }
-}
-
-
-/* =====================================================
-   МОБИЛЬНАЯ ВЕРСИЯ
-===================================================== */
-
-/* На компьютере мобильная карточка скрыта */
+/* =========================
+   MOBILE CARD
+========================= */
 
 .palette-mobile-card {
   display: none;
-}
-
-
-/* Карточка с изображением */
-
-.palette-mobile-card {
   position: relative;
-
   width: min(100%, 390px);
   margin: 34px auto 0;
-
   overflow: hidden;
   border-radius: 30px;
-
-  background: rgba(255, 255, 255, 0.86);
-
-  box-shadow:
-    0 20px 48px rgba(74, 52, 43, 0.13);
+  box-shadow: 0 20px 48px rgba(74,52,43,.14);
 }
 
-.palette-mobile-card > img {
+.palette-mobile-card img {
   display: block;
-
   width: 100%;
   height: auto;
 }
 
-
-/* Кружки поверх мобильной картинки */
-
+/* Вертикальные кружки поверх картинки */
 .mobile-palette-overlay {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 18px;
 
-  gap: 8px;
-
-  padding: 0 18px;
-
+  width: auto;
   pointer-events: none;
 }
 
 .mobile-palette-overlay .color-dot {
-  width: clamp(48px, 15vw, 62px);
-  height: clamp(48px, 15vw, 62px);
-
-  border-width: 3px;
-
-  animation:
-    paletteWaveMobile 2.6s ease-in-out infinite;
-
-  will-change: transform;
+  width: 66px;
+  height: 66px;
 }
 
-.mobile-palette-overlay .color-dot:nth-child(1) {
-  animation-delay: 0s;
+.mobile-palette-overlay .wave-dot {
+  animation: mobilePaletteWave 2.6s ease-in-out infinite;
 }
 
-.mobile-palette-overlay .color-dot:nth-child(2) {
-  animation-delay: 0.15s;
+.mobile-palette-overlay .wave-dot:nth-child(1) { animation-delay: 0s; }
+.mobile-palette-overlay .wave-dot:nth-child(2) { animation-delay: 0.18s; }
+.mobile-palette-overlay .wave-dot:nth-child(3) { animation-delay: 0.36s; }
+.mobile-palette-overlay .wave-dot:nth-child(4) { animation-delay: 0.54s; }
+.mobile-palette-overlay .wave-dot:nth-child(5) { animation-delay: 0.72s; }
+
+@keyframes mobilePaletteWave {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(8px); }
 }
 
-.mobile-palette-overlay .color-dot:nth-child(3) {
-  animation-delay: 0.3s;
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
-.mobile-palette-overlay .color-dot:nth-child(4) {
-  animation-delay: 0.45s;
-}
-
-.mobile-palette-overlay .color-dot:nth-child(5) {
-  animation-delay: 0.6s;
-}
-
-@keyframes paletteWaveMobile {
-  0%,
-  55%,
-  100% {
-    transform: translateY(0);
-  }
-
-  18% {
-    transform: translateY(-9px);
-  }
-
-  32% {
-    transform: translateY(2px);
-  }
-
-  42% {
-    transform: translateY(0);
-  }
-}
-
-
-/* =====================================================
-   ПЕРЕКЛЮЧЕНИЕ ДЕСКТОП / МОБИЛЬНЫЙ
-===================================================== */
-
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .palette-desktop {
-    display: none;
+    display: none !important;
   }
 
   .palette-mobile-card {
-    display: block;
+    display: block !important;
   }
 }
 
+@media (min-width: 769px) {
+  .palette-desktop {
+    display: flex !important;
+  }
 
-/* Для пользователей с отключёнными анимациями */
+  .palette-mobile-card {
+    display: none !important;
+  }
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .palette-desktop .color-dot,
+@media (max-width: 480px) {
+  .mobile-palette-overlay {
+    gap: 14px;
+  }
+
   .mobile-palette-overlay .color-dot {
-    animation: none;
-    transform: none;
+    width: 58px;
+    height: 58px;
   }
 }
 .rsvp-card { max-width: 860px; margin: 0 auto; padding: clamp(22px, 4vw, 38px); background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.72); backdrop-filter: blur(18px); border-radius: 34px; box-shadow: var(--shadow); }
