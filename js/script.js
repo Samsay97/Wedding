@@ -680,7 +680,7 @@ ${data.message || "Нет комментария"}
       const response =
         await fetch(
 
-          `https://api.telegram.org/bot${8837294046:AAHYmb72BCE2ZhwDmhNxQDgFCVWEX50N3oI}/sendMessage`,
+          `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
 
           {
 
