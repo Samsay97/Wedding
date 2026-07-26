@@ -293,44 +293,121 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .detail-card img { width: 40px; height: 40px; margin: 0 auto 16px; }
 .detail-card h3 { font-size: clamp(1.55rem, 2.8vw, 1.95rem); margin-bottom: 10px; }
 
-.palette-desktop { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto; }
-.color-dot { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 10px 26px rgba(48, 34, 24, .08); }
+/* ==============================
+   ДРЕСС-КОД - ПАЛИТРА
+============================== */
 
-.color-1 { background: #62482f; }
-.color-2 { background: #7c825e; }
-.color-3 { background: #bda48e; }
-.color-4 { background: #ffcdd0; }
-.color-5 { background: #ffcee1; }
 
-.palette-mobile-card { display: none; max-width: 360px; margin: 0 auto; position: relative; }
-.palette-mobile-card img { width: 100%; border-radius: 30px; }
-.mobile-palette-overlay { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 16px; }
-.mobile-palette-overlay .color-dot { width: 76px; aspect-ratio: 1; }
-.wave-dot:nth-child(1) { animation-delay: 0s; }
-.wave-dot:nth-child(2) { animation-delay: .3s; }
-.wave-dot:nth-child(3) { animation-delay: .6s; }
-.wave-dot:nth-child(4) { animation-delay: .9s; }
-.wave-dot:nth-child(5) { animation-delay: 1.2s; }
-.wave-dot { animation: dotWave 3.2s ease-in-out infinite; }
+/* ==============================
+   DESKTOP VERSION
+============================== */
 
-/* По умолчанию показываем только ПК палитру */
+.palette-desktop {
+
+    width: fit-content;
+    max-width: 100%;
+
+    margin: 42px auto 0;
+    padding: 20px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: clamp(14px, 2vw, 26px);
+
+}
+
+.palette-desktop .color-dot {
+
+    margin: 0;
+    flex: 0 0 auto;
+
+    animation: paletteWaveDesktop 2.6s ease-in-out infinite;
+
+    will-change: transform;
+
+}
+
+/* волна слева направо */
+
+.palette-desktop .color-dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.palette-desktop .color-dot:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.palette-desktop .color-dot:nth-child(3) {
+    animation-delay: .30s;
+}
+
+.palette-desktop .color-dot:nth-child(4) {
+    animation-delay: .45s;
+}
+
+.palette-desktop .color-dot:nth-child(5) {
+    animation-delay: .60s;
+}
+
+@keyframes paletteWaveDesktop {
+
+    0%,
+    100% {
+
+        transform: translateY(0);
+    }
+
+    20% {
+
+        transform: translateY(-14px);
+    }
+
+    40% {
+
+        transform: translateY(0);
+    }
+}
+
+/* ==============================
+   MOBILE VERSION
+============================== */
+
+
+/* по умолчанию мобильную скрываем */
+
 .palette-mobile-card {
+
     display: none;
 }
 
+@media (max-width:768px) {
 
-/* Мобильная версия */
-@media (max-width: 768px) {
+
+    /* ПК палитра скрывается */
 
     .palette-desktop {
-        display: none;
+
+        display:none;
+
     }
 
+
+    /* мобильная показывается */
 
     .palette-mobile-card {
-        display: block;
+
+        display:block;
     }
 
+
+    /* убираем влияние ПК анимации */
+
+    .palette-mobile-card .color-dot {
+
+        animation:none;
+    }
 }
 
 .rsvp-card { max-width: 860px; margin: 0 auto; padding: clamp(22px, 4vw, 38px); background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.72); backdrop-filter: blur(18px); border-radius: 34px; box-shadow: var(--shadow); }
