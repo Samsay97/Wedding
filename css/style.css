@@ -385,7 +385,7 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
     При уменьшении окна уменьшается и сам кружок,
     а не только его ширина.
   */
-  --dot-size: clamp(50px, 6.5vw, 72px);
+  --dot-size: clamp(56px, 7vw, 80px);
   --wave-lift: -8px;
 
   animation: palettePassingWave 3.8s ease-in-out infinite;
@@ -466,7 +466,7 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
     На мобильном размер зависит от ширины экрана.
     Ширина и высота всегда меняются вместе.
   */
-  --dot-size: clamp(42px, 13vw, 58px);
+  --dot-size: clamp(46px, 14vw, 64px);
   --wave-lift: -6px;
 
   animation: palettePassingWave 3.8s ease-in-out infinite;
@@ -556,7 +556,7 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
   }
 
   #dress-code .mobile-palette-overlay .color-dot {
-    --dot-size: 40px;
+    --dot-size: 44px;
   }
 }
 
