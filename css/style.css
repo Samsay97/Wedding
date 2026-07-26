@@ -293,123 +293,252 @@ body.site-ready footer { opacity: 1; pointer-events: auto; }
 .detail-card img { width: 40px; height: 40px; margin: 0 auto 16px; }
 .detail-card h3 { font-size: clamp(1.55rem, 2.8vw, 1.95rem); margin-bottom: 10px; }
 
-/* ==============================
-   ДРЕСС-КОД - ПАЛИТРА
-============================== */
+/* =====================================================
+   ДРЕСС-КОД — ЦВЕТОВАЯ ПАЛИТРА
+===================================================== */
 
 
-/* ==============================
-   DESKTOP VERSION
-============================== */
+/* Общий вид всех цветных кружков */
+
+.color-dot {
+  display: block;
+  width: clamp(72px, 8vw, 104px);
+  height: clamp(72px, 8vw, 104px);
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    0 12px 28px rgba(74, 52, 43, 0.13),
+    inset 0 0 0 1px rgba(122, 44, 59, 0.05);
+}
+
+
+/* Цвета: color-1 самый тёмный, color-5 самый светлый */
+
+.color-1 {
+  background: #7a2c3b;
+}
+
+.color-2 {
+  background: #b0937d;
+}
+
+.color-3 {
+  background: #9ba483;
+}
+
+.color-4 {
+  background: #e9cad2;
+}
+
+.color-5 {
+  background: #f4e6ea;
+}
+
+
+/* =====================================================
+   ДЕСКТОПНАЯ ВЕРСИЯ
+===================================================== */
 
 .palette-desktop {
+  width: fit-content;
+  max-width: 100%;
 
-    width: fit-content;
-    max-width: 100%;
+  margin: 42px auto 0;
+  padding: 24px 12px;
 
-    margin: 42px auto 0;
-    padding: 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: clamp(14px, 2vw, 26px);
-
+  gap: clamp(12px, 2vw, 24px);
 }
+
+
+/* Бегущая волна */
 
 .palette-desktop .color-dot {
+  margin: 0;
 
-    margin: 0;
-    flex: 0 0 auto;
+  animation:
+    paletteWaveDesktop 2.6s ease-in-out infinite;
 
-    animation: paletteWaveDesktop 2.6s ease-in-out infinite;
-
-    will-change: transform;
-
+  will-change: transform;
 }
 
-/* волна слева направо */
-
 .palette-desktop .color-dot:nth-child(1) {
-    animation-delay: 0s;
+  animation-delay: 0s;
 }
 
 .palette-desktop .color-dot:nth-child(2) {
-    animation-delay: .15s;
+  animation-delay: 0.15s;
 }
 
 .palette-desktop .color-dot:nth-child(3) {
-    animation-delay: .30s;
+  animation-delay: 0.3s;
 }
 
 .palette-desktop .color-dot:nth-child(4) {
-    animation-delay: .45s;
+  animation-delay: 0.45s;
 }
 
 .palette-desktop .color-dot:nth-child(5) {
-    animation-delay: .60s;
+  animation-delay: 0.6s;
 }
 
 @keyframes paletteWaveDesktop {
+  0%,
+  55%,
+  100% {
+    transform: translateY(0);
+  }
 
-    0%,
-    100% {
+  18% {
+    transform: translateY(-14px);
+  }
 
-        transform: translateY(0);
-    }
+  32% {
+    transform: translateY(3px);
+  }
 
-    20% {
-
-        transform: translateY(-14px);
-    }
-
-    40% {
-
-        transform: translateY(0);
-    }
+  42% {
+    transform: translateY(0);
+  }
 }
 
-/* ==============================
-   MOBILE VERSION
-============================== */
 
+/* =====================================================
+   МОБИЛЬНАЯ ВЕРСИЯ
+===================================================== */
 
-/* по умолчанию мобильную скрываем */
+/* На компьютере мобильная карточка скрыта */
 
 .palette-mobile-card {
+  display: none;
+}
 
+
+/* Карточка с изображением */
+
+.palette-mobile-card {
+  position: relative;
+
+  width: min(100%, 390px);
+  margin: 34px auto 0;
+
+  overflow: hidden;
+  border-radius: 30px;
+
+  background: rgba(255, 255, 255, 0.86);
+
+  box-shadow:
+    0 20px 48px rgba(74, 52, 43, 0.13);
+}
+
+.palette-mobile-card > img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+}
+
+
+/* Кружки поверх мобильной картинки */
+
+.mobile-palette-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 18px;
+
+  pointer-events: none;
+}
+
+.mobile-palette-overlay .color-dot {
+  width: clamp(48px, 15vw, 62px);
+  height: clamp(48px, 15vw, 62px);
+
+  border-width: 3px;
+
+  animation:
+    paletteWaveMobile 2.6s ease-in-out infinite;
+
+  will-change: transform;
+}
+
+.mobile-palette-overlay .color-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.mobile-palette-overlay .color-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.mobile-palette-overlay .color-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.mobile-palette-overlay .color-dot:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.mobile-palette-overlay .color-dot:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+@keyframes paletteWaveMobile {
+  0%,
+  55%,
+  100% {
+    transform: translateY(0);
+  }
+
+  18% {
+    transform: translateY(-9px);
+  }
+
+  32% {
+    transform: translateY(2px);
+  }
+
+  42% {
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   ПЕРЕКЛЮЧЕНИЕ ДЕСКТОП / МОБИЛЬНЫЙ
+===================================================== */
+
+@media (max-width: 680px) {
+  .palette-desktop {
     display: none;
+  }
+
+  .palette-mobile-card {
+    display: block;
+  }
 }
 
-@media (max-width:768px) {
 
+/* Для пользователей с отключёнными анимациями */
 
-    /* ПК палитра скрывается */
-
-    .palette-desktop {
-
-        display:none;
-
-    }
-
-
-    /* мобильная показывается */
-
-    .palette-mobile-card {
-
-        display:block;
-    }
-
-
-    /* убираем влияние ПК анимации */
-
-    .palette-mobile-card .color-dot {
-
-        animation:none;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .palette-desktop .color-dot,
+  .mobile-palette-overlay .color-dot {
+    animation: none;
+    transform: none;
+  }
 }
-
 .rsvp-card { max-width: 860px; margin: 0 auto; padding: clamp(22px, 4vw, 38px); background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.72); backdrop-filter: blur(18px); border-radius: 34px; box-shadow: var(--shadow); }
 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 18px; }
 .field { display: grid; gap: 10px; }
