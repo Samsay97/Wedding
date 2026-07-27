@@ -598,123 +598,104 @@ class PhoneMask {
 
 
 class RSVPForm {
-
   constructor() {
+    this.form =
+      document.getElementById("rsvpForm");
 
-    this.form = document.getElementById("rsvpForm");
-    this.message = document.getElementById("rsvpMessage");
+    this.message =
+      document.getElementById("rsvpMessage");
 
     if (!this.form) return;
 
+    this.submitButton =
+      this.form.querySelector(
+        "button[type='submit']"
+      );
 
-    this.submitButton = this.form.querySelector(
-      "button[type='submit']"
-    );
+    this.storageKey =
+      "wedding_rsvp_sent";
 
+    this.lockDuration =
+      24 * 60 * 60 * 1000;
 
-    this.storageKey = "wedding_rsvp_sent";
-
+    this.isSending = false;
 
     this.bind();
-
     this.checkAlreadySent();
-
   }
-
-
 
   bind() {
-
-
     this.form.addEventListener(
       "submit",
-      (event) => {
-
+      event => {
         event.preventDefault();
 
+        if (!this.form.reportValidity()) {
+          return;
+        }
 
-        if (!this.form.reportValidity()) return;
-
-
-        this.sendToTelegram();
-
+        this.send();
       }
     );
-
-
   }
 
-
-
-  checkAlreadySent() {
-
-
-    const sentTime = localStorage.getItem(
-      this.storageKey
+  hasActiveLock() {
+    const sentTime = Number(
+      localStorage.getItem(
+        this.storageKey
+      )
     );
 
-
-    if (!sentTime) return;
-
-
-
-    const hoursPassed =
-      (Date.now() - Number(sentTime))
-      / 1000
-      / 60
-      / 60;
-
-
-
-    if (hoursPassed < 24) {
-
-
-      if (this.submitButton) {
-
-        this.submitButton.disabled = true;
-
-        this.submitButton.textContent =
-          "Ответ уже отправлен 🤍";
-
-      }
-
-      if (this.message) {
-
-        this.message.textContent =
-          "Спасибо! Мы уже получили ваш ответ.";
-
-      }
-
-    } else {
-
+    if (!Number.isFinite(sentTime)) {
       localStorage.removeItem(
         this.storageKey
       );
 
+      return false;
     }
 
+    const lockIsActive =
+      Date.now() - sentTime <
+      this.lockDuration;
+
+    if (!lockIsActive) {
+      localStorage.removeItem(
+        this.storageKey
+      );
+    }
+
+    return lockIsActive;
   }
 
+  checkAlreadySent() {
+    if (this.hasActiveLock()) {
+      this.lockForm();
+    }
+  }
 
-  async sendToTelegram() {
+  lockForm() {
+    if (this.submitButton) {
+      this.submitButton.disabled = true;
 
-
-    if (
-      localStorage.getItem(
-        this.storageKey
-      )
-    ) {
-
-      return;
-
+      this.submitButton.textContent =
+        "Ответ уже отправлен 🤍";
     }
 
-    const TELEGRAM_BOT_TOKEN =
-      "8837294046:AAGnKHwMNgYF_mL7_cxadXgSKaG21UdgMjA";
+    if (this.message) {
+      this.message.textContent =
+        "Спасибо! Мы уже получили ваш ответ.";
+    }
+  }
 
-    const TELEGRAM_CHAT_ID =
-      "1320744340";
+  async send() {
+    if (this.isSending) {
+      return;
+    }
 
+    if (this.hasActiveLock()) {
+      this.lockForm();
+      return;
+    }
 
     const formData =
       new FormData(this.form);
@@ -724,147 +705,90 @@ class RSVPForm {
         formData.entries()
       );
 
-    const attendance =
-      data.attendance === "yes"
-
-        ? "✅ С радостью приду"
-
-        : "❌ К сожалению, не смогу";
-
-
-    const message = `
-
-💍 Новая анкета гостя
-
-
-👤 Имя:
-${data.name}
-
-
-📞 Телефон:
-${data.phone}
-
-
-💒 Присутствие:
-${attendance}
-
-
-💌 Комментарий:
-${data.message || "Нет комментария"}
-
-
-
-────────────
-
-
-🤍 Александр & Лиана
-
-📅 05 сентября 2026
-
-⏰ ${new Date().toLocaleString("ru-RU")}
-
-`;
+    this.isSending = true;
 
     if (this.submitButton) {
-
       this.submitButton.disabled = true;
 
       this.submitButton.textContent =
         "Отправляем...";
+    }
 
+    if (this.message) {
+      this.message.textContent = "";
     }
 
     try {
-      const response =
-        await fetch(
+      const response = await fetch(
+        "/api/rsvp",
+        {
+          method: "POST",
 
-          `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-
-          {
-
-            method: "POST",
-
-
-            headers: {
-
-              "Content-Type":
+          headers: {
+            "Content-Type":
               "application/json"
-            },
+          },
 
+          credentials: "same-origin",
 
-            body:
-            JSON.stringify({
+          body: JSON.stringify({
+            name: data.name,
+            phone: data.phone,
+            attendance:
+              data.attendance,
+            message:
+              data.message || ""
+          })
+        }
+      );
 
-              chat_id:
-              TELEGRAM_CHAT_ID,
+      const result =
+        await response
+          .json()
+          .catch(() => ({}));
 
-
-              text:
-              message
-
-            })
-
-          }
-
-        );
-
-
-      if (!response.ok) {
-
+      if (!response.ok || !result.ok) {
         throw new Error(
-          "Telegram error"
+          result.error ||
+          "Ошибка отправки"
         );
-
       }
 
       localStorage.setItem(
-
         this.storageKey,
-
         Date.now()
-
       );
-
-      if (this.message) {
-
-        this.message.textContent =
-          "Спасибо! Ваш ответ получен 🤍";
-
-      }
 
       this.form.reset();
 
-      if (this.submitButton) {
-
-        this.submitButton.disabled = true;
-
-        this.submitButton.textContent =
-          "Ответ уже отправлен 🤍";
-
+      if (this.message) {
+        this.message.textContent =
+          "Спасибо! Ваш ответ получен 🤍";
       }
 
-    } catch(error) {
+      this.lockForm();
 
-
+    } catch (error) {
       console.error(
+        "RSVP error:",
         error
       );
 
       if (this.message) {
-
         this.message.textContent =
+          error.message ||
           "Не удалось отправить анкету. Попробуйте ещё раз.";
       }
 
       if (this.submitButton) {
-
         this.submitButton.disabled = false;
 
         this.submitButton.textContent =
           "Отправить анкету";
-
       }
 
+    } finally {
+      this.isSending = false;
     }
   }
 }
